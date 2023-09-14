@@ -61,7 +61,7 @@ const AvailabilityContent = () => {
     <div>
       <Form {...form}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
           <FormField
             control={form.control}
             name="timezone"
@@ -77,7 +77,7 @@ const AvailabilityContent = () => {
                       <SelectValue placeholder="Select your timezone" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="max-h-96 overflow-y-scroll">
+                  <SelectContent className="max-h-48 md:max-h-96 overflow-y-scroll">
                     {Intl.supportedValuesOf("timeZone").map((tz) => (
                       <SelectItem key={tz} value={tz}>
                         {tz}
@@ -91,7 +91,7 @@ const AvailabilityContent = () => {
           />
           <Button
             disabled={!form.formState.isDirty || !form.formState.isValid}
-            className="float-right self-end"
+            className="float-right self-end mt-2"
             icon={<SaveIcon className="w-4 h-4" />}
             loading={saveTimezone.isLoading}
           >

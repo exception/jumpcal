@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { GithubIcon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -22,6 +23,7 @@ const LoginForm = () => {
   const searchParams = useSearchParams();
   const next = searchParams?.get("next");
   const [clickedGoogle, setClickedGoogle] = useState(false);
+  const [clickedGithub, setClickedGithub] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -80,6 +82,19 @@ const LoginForm = () => {
         icon={<GoogleIcon className="h-4 w-4" />}
       >
         Continue with Google
+      </Button>
+      <Button
+        loading={clickedGithub}
+        size="xl"
+        onClick={() => {
+          setClickedGithub(true);
+          void signIn("github", {
+            ...(next && next.length > 0 ? { callbackUrl: next } : {}),
+          });
+        }}
+        icon={<GithubIcon className="h-4 w-4" />}
+      >
+        Continue with GitHub
       </Button>
       <p className="text-sm text-neutral-500">
         Already have an account?{" "}

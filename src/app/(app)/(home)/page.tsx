@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const RootContainer = () => {
   const { data, isLoading } = trpc.users.hasIntegrations.useQuery();
@@ -18,9 +19,14 @@ const RootContainer = () => {
 
   if (!data) {
     return (
-      <div className="bg-white border border-neutral-200 flex items-center justify-center flex-col space-y-2 p-4 text-neutral-400">
-        <ArchiveX className="h-6 w-6" />
-        <p className="text-lg">
+      <div className="bg-white border border-neutral-200 flex items-center justify-center flex-col space-y-2 p-4 text-neutral-500">
+        <Image
+          src={"/_static/svgs/late-for-meeting.svg"}
+          alt="No Integrations"
+          width={300}
+          height={300}
+        />
+        <p className="text-base md:text-lg text-center">
           You need to enable call integrations before you can start taking
           calls.
         </p>
@@ -39,12 +45,7 @@ const RootContainer = () => {
     );
   }
 
-  return (
-    <>
-      <IncomingCalls />
-      <Separator className="my-4" />
-    </>
-  );
+  return <IncomingCalls />;
 };
 
 export default RootContainer;

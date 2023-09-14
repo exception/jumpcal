@@ -53,12 +53,14 @@ const AvailabilityTable = () => {
   };
 
   if (isLoading) {
-    return <Skeleton className="flex mt-2 w-full h-96" />;
+    return <Skeleton className="flex mt-4 w-full h-96" />;
   }
 
   return (
-    <div className="flex w-full flex-col space-y-2 py-2">
-      <h5 className="text-sm font-medium text-neutrals-500">Available Days</h5>
+    <div className="flex w-full flex-col py-2">
+      <h5 className="text-sm font-medium text-neutrals-500 mb-2">
+        Weekly Schedule
+      </h5>
       <div className="w-full divide-y divide-neutrals-100 overflow-hidden rounded-lg border border-neutrals-100 bg-neutrals-50">
         {availability.map((day) => (
           <DayAvailabilityRow
@@ -72,7 +74,7 @@ const AvailabilityTable = () => {
       </div>
       <Button
         icon={<Save className="h-4 w-4" />}
-        className="self-end float-right"
+        className="self-end float-right mt-2"
         disabled={!availability || !changed}
         loading={updateAvailability.isLoading}
         onClick={() =>

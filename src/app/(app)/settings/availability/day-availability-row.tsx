@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
+import { capitalize, cn } from "@/lib/utils";
 import { Day, DayAvailability, Time, TimeSlot } from "@/lib/availability";
 import { Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -76,7 +76,7 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
 
     const newRange = {
       start: { hour: 9, minute: 0 },
-      end: { hour: 14, minute: 0 },
+      end: { hour: 17, minute: 0 },
     };
     setTimeRanges([...timeRanges, newRange]);
   }, [isAvailable, timeRanges]);
@@ -152,7 +152,9 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
             checked={isAvailable}
             onCheckedChange={(checked) => availableChange(!!checked)}
           />
-          <p className="text-sm font-medium text-neutral-400">{day}</p>
+          <p className="text-sm font-medium text-neutral-500">
+            {capitalize(day.toLowerCase())}
+          </p>
         </div>
         <div className="flex flex-col space-y-2">
           {isAvailable &&
@@ -210,7 +212,7 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
               </div>
             ))}
           {timeRanges.length > 0 && collided && (
-            <p className="text-sm text-red-500">There are collisions!</p>
+            <p className="text-sm text-red-500">This schedule has overlaps.</p>
           )}
         </div>
       </div>

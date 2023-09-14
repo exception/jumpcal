@@ -16,3 +16,5 @@ export const makeMetadata = ({ title = "Jumpcal" }: MetadataProps = {}): Metadat
     icons: "/favicon.ico"
   }
 }
+
+export const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);

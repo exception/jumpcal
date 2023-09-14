@@ -1,7 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { Call } from "@prisma/client";
 import { usePathname } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { trpc } from "./trpc-provider";
 import { useSession } from "next-auth/react";
 
@@ -22,7 +22,6 @@ const IncomingCallsProvider = ({
 }: React.PropsWithChildren<unknown>) => {
   const pathname = usePathname();
   const { toast } = useToast();
-  const [previousCalls, setPreviousCalls] = useState<Call[]>([]);
   const { status } = useSession();
 
   const {
@@ -37,22 +36,23 @@ const IncomingCallsProvider = ({
     enabled: status === "authenticated",
   });
 
-  useEffect(() => {
-    if (status !== "authenticated") return;
+  const previousCallsRef = useRef(0);
 
-    if (pathname !== "/") {
-      if (incomingCalls) {
-        if (incomingCalls?.length !== previousCalls.length) {
-          toast({
-            title: "New Incoming calls",
-            description: "There are new incoming calls.",
-          });
-        }
-      }
+  useEffect(() => {
+    if (
+      status === "authenticated" &&
+      pathname !== "/" &&
+      incomingCalls &&
+      incomingCalls.length !== previousCallsRef.current
+    ) {
+      toast({
+        title: "New Incoming calls",
+      });
     }
 
-    setPreviousCalls(incomingCalls ?? []);
-  }, [pathname, incomingCalls, previousCalls, status]);
+    // ! FIX: length check is not very reliable here.
+    previousCallsRef.current = incomingCalls?.length ?? 0;
+  }, [pathname, incomingCalls, status]);
 
   return (
     <Context.Provider

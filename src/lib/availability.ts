@@ -35,7 +35,7 @@ export const DayAvailabilty = z.object({
     "SUNDAY",
   ]),
   available: z.boolean(),
-  slots: TimeSlot.array().min(1),
+  slots: TimeSlot.array(),
 });
 
 export type Day = z.infer<typeof DayAvailabilty>["day"];

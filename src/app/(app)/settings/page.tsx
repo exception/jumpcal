@@ -11,7 +11,7 @@ const AccountSettings = () => {
   return (
     <SettingsContainer
       title="Account"
-      description="This is how you'll appear to the world."
+      description="This is how you will appear to the world."
     >
       <UploadAvatarRow />
       <AccountSettingsForm />

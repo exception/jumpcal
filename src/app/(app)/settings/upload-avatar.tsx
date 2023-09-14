@@ -104,7 +104,7 @@ const UploadAvatarRow = () => {
               unoptimized
             />
 
-            <div className="absolute left-0 top-0 h-full w-full flex opacity-0 items-center justify-center text-neutral-950 transition-all group-hover:opacity-100">
+            <div className="absolute left-0 top-0 h-full w-full flex opacity-0 items-center justify-center text-neutral-100 transition-all group-hover:opacity-100">
               <Pencil className="h-6 w-6" />
             </div>
             <input id="upload-image-form" {...getInputProps()} />

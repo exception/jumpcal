@@ -12,7 +12,7 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, MoonIcon, Settings, UserIcon } from "lucide-react";
+import { LogOut, MoonIcon, Settings } from "lucide-react";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { Skeleton } from "../ui/skeleton";
 
@@ -44,7 +44,7 @@ const UserDropdown = () => {
               className="object-cover"
             />
             <AvatarFallback>
-              <UserIcon className="h-8 w-8" />
+              <Skeleton className="h-8 w-8" />
             </AvatarFallback>
           </Avatar>
           {data && !isLoading && (

@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { UserIcon } from "lucide-react";
 
 interface Props {
@@ -19,7 +20,7 @@ const UserHeader = ({ name, image, description }: Props) => {
           className="object-cover"
         />
         <AvatarFallback>
-          <UserIcon className="h-20 w-20" />
+          <Skeleton className="h-20 w-20" />
         </AvatarFallback>
       </Avatar>
       <h1 className="font-medium text-3xl">{name}</h1>

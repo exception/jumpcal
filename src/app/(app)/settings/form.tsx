@@ -85,7 +85,7 @@ const AccountSettingsForm = () => {
               <FormLabel>About</FormLabel>
               <Textarea
                 {...field}
-                placeholder="A short description about who you are and how you can help potential callers."
+                placeholder="A brief description about who you are and how you can help potential callers."
               />
               <FormMessage />
             </FormItem>
