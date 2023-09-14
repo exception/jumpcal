@@ -13,5 +13,6 @@ interface MetadataProps {
 export const makeMetadata = ({ title = "Jumpcal" }: MetadataProps = {}): Metadata => {
   return {
     title,
+    icons: "/favicon.ico"
   }
 }

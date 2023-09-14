@@ -1,5 +1,8 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { env } from "@/env.mjs";
+import { qstash } from "@/lib/upstash";
+import { API_DOMAIN } from "@/lib/constants";
 
 export const callRoutes = createTRPCRouter({
   requestCall: publicProcedure
@@ -14,7 +17,7 @@ export const callRoutes = createTRPCRouter({
         target: z.string().min(1),
       }),
     )
-    .mutation(async ({ ctx: { prisma }, input }) => {
+    .mutation(async ({ ctx: { prisma, twilio }, input }) => {
       const call = await prisma.call.create({
         data: {
           target: {
@@ -26,12 +29,39 @@ export const callRoutes = createTRPCRouter({
           callerName: input.caller.name,
           callerReason: input.caller.reason,
           countryCode: input.caller.country,
-          hostedOn: "ZOOM",
+          hostedOn: "ZOOM", //! Default to Zoom as it's the only thing we support for now
           status: "PENDING",
         },
       });
 
-      // TODO send notification to user
+      await qstash.schedules.create({
+        delay: 60, //? let call ring for 60 seconds
+        method: "POST",
+        body: JSON.stringify({ callId: call.id }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        destination: `${API_DOMAIN}/api/qstash/update-call-status`,
+        cron: "",
+      });
+
+      const target = await prisma.user.findUnique({
+        where: {
+          id: input.target,
+        },
+        select: {
+          phoneNumber: true,
+        },
+      });
+
+      if (target?.phoneNumber) {
+        await twilio.messages.create({
+          from: env.TWILIO_PHONE_NUMBER,
+          to: target.phoneNumber,
+          body: `You have a new Jumpcal meeting request from ${input.caller.name} who wants to talk about "${input.caller.reason}"`,
+        });
+      }
+
       return true;
     }),
   incomingCalls: protectedProcedure.query(({ ctx: { session, prisma } }) => {
@@ -44,4 +74,29 @@ export const callRoutes = createTRPCRouter({
       },
     });
   }),
+  callStatus: publicProcedure
+    .input(
+      z.object({
+        callId: z.string(),
+      }),
+    )
+    .query(async ({ ctx: { prisma }, input }) => {
+      const call = await prisma.call.findUnique({
+        where: {
+          id: input.callId,
+        },
+      });
+
+      if (!call) {
+        return null;
+      }
+
+      const date = new Date();
+
+      const differenceInMilliseconds =
+        date.getTime() - call.createdAt.getTime();
+      const differenceInSeconds = differenceInMilliseconds / 1000;
+
+      return { status: call.status, ringingFor: differenceInSeconds };
+    }),
 });

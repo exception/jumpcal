@@ -1,45 +1,12 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import cloudinary from "cloudinary";
+import { DayAvailability, DayAvailabilty } from "@/lib/availability";
 
-const Time = z.object({
-  hour: z.number().gt(0).lte(23),
-  minute: z.number().gt(0).lte(59),
-});
-
-const TimeSlot = z
-  .object({
-    start: Time,
-    end: Time,
-  })
-  .refine(
-    (data) => {
-      const startInMinutes = data.start.hour * 60 + data.start.minute;
-      const endInMinutes = data.end.hour * 60 + data.end.minute;
-
-      return endInMinutes > startInMinutes;
-    },
-    {
-      message: "End time must be larger than start time.",
-      path: ["end"],
-    },
-  );
-
-const DayAvailabilty = z.object({
-  day: z.enum([
-    "MONDAY",
-    "TUESDAY",
-    "WEDNESDAY",
-    "THURSDAY",
-    "FRIDAY",
-    "SATURDAY",
-    "SUNDAY",
-  ]),
-  available: z.boolean(),
-  slots: TimeSlot.array().min(1),
-});
-
-export type DayAvailability = z.infer<typeof DayAvailabilty>;
+const defaultSlotRange = {
+  start: { hour: 9, minute: 0 },
+  end: { hour: 16, minute: 0 },
+};
 
 export const userRoutes = createTRPCRouter({
   onboard: protectedProcedure
@@ -59,6 +26,15 @@ export const userRoutes = createTRPCRouter({
           name: input.fullName,
           username: input.username.toLowerCase(),
           timezone: input.timezone,
+          availability: [
+            { day: "MONDAY", available: true, slots: [defaultSlotRange] },
+            { day: "TUESDAY", available: true, slots: [defaultSlotRange] },
+            { day: "WEDNESDAY", available: true, slots: [defaultSlotRange] },
+            { day: "THURSDAY", available: true, slots: [defaultSlotRange] },
+            { day: "FRIDAY", available: true, slots: [defaultSlotRange] },
+            { day: "SATURDAY", available: false, slots: [defaultSlotRange] },
+            { day: "SUNDAY", available: false, slots: [defaultSlotRange] },
+          ],
         },
       });
     }),
@@ -221,6 +197,20 @@ export const userRoutes = createTRPCRouter({
         },
       });
     }),
+  availability: protectedProcedure.query(
+    async ({ ctx: { session, prisma } }) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+        select: {
+          availability: true,
+        },
+      });
+
+      return user?.availability as DayAvailability[];
+    },
+  ),
   updateAvailability: protectedProcedure
     .input(
       z.object({
@@ -233,7 +223,9 @@ export const userRoutes = createTRPCRouter({
           id: session.user.id,
         },
         data: {
-          availability: JSON.stringify(input.availability),
+          availability: {
+            set: input.availability,
+          },
         },
       });
     }),

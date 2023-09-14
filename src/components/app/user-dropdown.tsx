@@ -18,7 +18,9 @@ import { Skeleton } from "../ui/skeleton";
 
 const UserDropdown = () => {
   const { data: session, status } = useSession();
-  const { data, isLoading } = trpc.users.dndStatus.useQuery();
+  const { data, isLoading } = trpc.users.dndStatus.useQuery(undefined, {
+    enabled: status === "authenticated",
+  });
 
   if (status === "unauthenticated") {
     return <></>;

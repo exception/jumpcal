@@ -40,8 +40,6 @@ const UploadAvatarRow = () => {
   });
 
   useEffect(() => {
-    console.log(session?.user.email);
-
     setImageContent(
       session?.user.image ??
         `https://api.dicebear.com/7.x/lorelei/svg?seed=${session?.user.name}&scale=80&backgroundColor=ec4899`,
@@ -114,7 +112,7 @@ const UploadAvatarRow = () => {
         )}
       </Dropzone>
       <div className="flex w-full justify-between items-center">
-        <p className="text-xs md:text-sm text-neutral-400">
+        <p className="text-xs md:text-sm text-neutral-400 max-w-md">
           Max file size: <span className="font-medium">3MB</span>, only .jpg and
           .png are supported. Default avatars provided by Dicebear.
         </p>

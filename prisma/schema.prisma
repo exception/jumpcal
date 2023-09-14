@@ -53,7 +53,7 @@ model User {
   image         String?
 
   description  String?
-  availability Json?   @db.JsonB
+  availability Json[]  @db.JsonB
   timezone     String?
   phoneNumber  String?
   calendarLink String?

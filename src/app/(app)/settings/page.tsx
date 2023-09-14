@@ -1,6 +1,11 @@
+import { makeMetadata } from "@/lib/utils";
 import AccountSettingsForm from "./form";
 import SettingsContainer from "./settings-container";
 import UploadAvatarRow from "./upload-avatar";
+
+export const metadata = makeMetadata({
+  title: "Jumpcal - Account Settings",
+});
 
 const AccountSettings = () => {
   return (

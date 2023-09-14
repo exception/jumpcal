@@ -51,7 +51,7 @@ CREATE TABLE "User" (
     "username" TEXT,
     "image" TEXT,
     "description" TEXT,
-    "availability" JSONB,
+    "availability" JSONB[],
     "timezone" TEXT,
     "phoneNumber" TEXT,
     "calendarLink" TEXT,

@@ -3,6 +3,8 @@ import { prisma } from "@/db";
 import { notFound } from "next/navigation";
 import UserHeader from "./user-header";
 import OwnProfileBanner from "./own-profile-banner";
+import ChatCard from "./chat-card";
+import { DayAvailability } from "@/lib/availability";
 
 const fetchUser = (username: string) => {
   return prisma.user.findUnique({
@@ -18,6 +20,7 @@ const fetchUser = (username: string) => {
       dnd: true,
       calendarLink: true,
       availability: true,
+      timezone: true,
     },
   });
 };
@@ -43,6 +46,11 @@ const UserPage = async ({ params }: Props) => {
           name={user.name ?? ""}
           image={user.image}
           description={user.description ?? ""}
+        />
+        <ChatCard
+          dnd={user.dnd}
+          availability={user.availability as DayAvailability[]}
+          timezone={user.timezone ?? ""}
         />
       </MaxWidthContainer>
     </>

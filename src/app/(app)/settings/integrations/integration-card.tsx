@@ -36,7 +36,7 @@ const IntegrationCard = ({
       await handleEnable();
     } finally {
       setModalOpen(false);
-      // setEnabling(false);
+      setEnabling(false);
     }
   };
 

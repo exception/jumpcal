@@ -58,7 +58,6 @@ const OnboardingForm = () => {
 
   const onboardUserMutation = trpc.users.onboard.useMutation({
     async onSuccess() {
-      console.log("yay");
       await update();
       router.push("/");
     },

@@ -1,5 +1,10 @@
+import { makeMetadata } from "@/lib/utils";
 import SettingsContainer from "../settings-container";
 import SmsNotification from "./sms-notification";
+
+export const metadata = makeMetadata({
+  title: "Jumpcal - Notification Settings",
+});
 
 const NotificationSettings = () => {
   return (

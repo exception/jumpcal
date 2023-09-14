@@ -57,14 +57,14 @@ const SmsNotification = () => {
         await update();
         setEnabling(false);
         toast({
-          title: "SMS enabled",
+          title: "SMS Enabled",
           description:
             "Jumpcal will now send you SMS notifications about incoming call requests.",
         });
       } else {
         toast({
           variant: "destructive",
-          title: "Verification failed",
+          title: "Verification Failed",
           description: "The code you provided was not valid.",
         });
         form.setValue("code", undefined);
@@ -77,7 +77,7 @@ const SmsNotification = () => {
     async onSuccess() {
       await update();
       toast({
-        title: "SMS disabled",
+        title: "SMS Disabled",
         description:
           "You will no longer receive notifications about incoming calls via SMS",
       });
@@ -121,7 +121,11 @@ const SmsNotification = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
-                  <Input {...field} placeholder="Phone Number" />
+                  <Input
+                    {...field}
+                    disabled={smsSent}
+                    placeholder="Phone Number"
+                  />
                   <FormMessage />
                 </FormItem>
               )}
