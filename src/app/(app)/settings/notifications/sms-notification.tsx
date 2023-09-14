@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { trpc } from "@/lib/providers/trpc-provider";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   phoneNumber: z.string().min(1),
@@ -26,11 +28,61 @@ const SmsNotification = () => {
   const { data: session, update, status } = useSession();
   const [enabling, setEnabling] = useState(false);
   const [smsSent, setSmsSent] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
   const code = form.watch("code");
+
+  const sendCode = trpc.notifications.sendVerifyCode.useMutation({
+    onSuccess(data) {
+      if (data) {
+        setSmsSent(true);
+      }
+    },
+    onError() {
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description:
+          "We were unable to send your verification code, please try again later.",
+      });
+    },
+  });
+
+  const verifyCode = trpc.notifications.verifyTwilioCode.useMutation({
+    async onSuccess({ status }) {
+      if (status === "verified") {
+        await update();
+        setEnabling(false);
+        toast({
+          title: "SMS enabled",
+          description:
+            "Jumpcal will now send you SMS notifications about incoming call requests.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Verification failed",
+          description: "The code you provided was not valid.",
+        });
+        form.setValue("code", undefined);
+        setSmsSent(false);
+      }
+    },
+  });
+
+  const removeSms = trpc.notifications.removeSms.useMutation({
+    async onSuccess() {
+      await update();
+      toast({
+        title: "SMS disabled",
+        description:
+          "You will no longer receive notifications about incoming calls via SMS",
+      });
+    },
+  });
 
   useEffect(() => {
     if (smsSent) {
@@ -40,7 +92,14 @@ const SmsNotification = () => {
 
   const handleSubmit = (form: z.infer<typeof formSchema>) => {
     if (!smsSent) {
-      setSmsSent(true);
+      sendCode.mutate({
+        phone: form.phoneNumber,
+      });
+    } else {
+      verifyCode.mutate({
+        phone: form.phoneNumber,
+        code: form.code as string,
+      });
     }
   };
 
@@ -82,6 +141,7 @@ const SmsNotification = () => {
             )}
             <Button
               disabled={!form.formState.isValid || (smsSent && !code)}
+              loading={sendCode.isLoading || verifyCode.isLoading}
               className="w-full"
             >
               {smsSent ? "Validate Code" : "Send Code"}
@@ -95,7 +155,7 @@ const SmsNotification = () => {
         type="NOTIFICATION"
         description="Jumpcal will notify you about new calls via SMS."
         enabled={!!session?.user.phoneNumber}
-        handleDisable={async () => void 0}
+        handleDisable={async () => removeSms.mutate()}
         handleEnable={async () => {
           setEnabling(true);
         }}

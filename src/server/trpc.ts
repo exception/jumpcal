@@ -15,6 +15,10 @@ import { ZodError } from "zod";
 import { prisma } from "@/db";
 import { GetServerSidePropsContext } from "next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import twilio from "twilio";
+import { env } from "@/env.mjs";
+
+const client = twilio(env.TWILIO_SID, env.TWILIO_AUTH_TOKEN);
 
 const getServerAuthSession = (ctx: {
   req: GetServerSidePropsContext["req"];
@@ -31,6 +35,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
+    twilio: client
   };
 };
 

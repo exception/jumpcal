@@ -13,6 +13,9 @@ export const env = createEnv({
         : z.string().min(1).optional(),
     ZOOM_CLIENT_SECRET: z.string().min(1),
     CLOUDINARY_URL: z.string().min(1),
+    TWILIO_SID: z.string().min(1),
+    TWILIO_AUTH_TOKEN: z.string().min(1),
+    TWILIO_SERVICE: z.string().min(1),
   },
 
   client: {
@@ -28,5 +31,8 @@ export const env = createEnv({
     NEXT_PUBLIC_ZOOM_CLIENT_ID: process.env.NEXT_PUBLIC_ZOOM_CLIENT_ID,
     ZOOM_CLIENT_SECRET: process.env.ZOOM_CLIENT_SECRET,
     CLOUDINARY_URL: process.env.CLOUDINARY_URL,
+    TWILIO_SID: process.env.TWILIO_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_SERVICE: process.env.TWILIO_SERVICE,
   },
 });

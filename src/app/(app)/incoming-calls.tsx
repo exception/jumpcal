@@ -2,24 +2,16 @@ import { ArchiveX, Loader2, PhoneIncoming } from "lucide-react";
 import IncomingCallCard from "./incoming-call-card";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIncomingCalls } from "@/lib/providers/incoming-calls-provider";
 
 const IncomingCalls = () => {
-  const {
-    data: incomingCalls,
-    isInitialLoading,
-    isRefetching,
-  } = trpc.calls.incomingCalls.useQuery(undefined, {
-    refetchInterval: 3_000, // 3 seconds
-    refetchIntervalInBackground: true,
-    retry: true,
-    retryDelay: (attempt) => attempt * 1000,
-  });
+  const { calls, isInitialLoading, isRefetching } = useIncomingCalls();
 
   if (isInitialLoading) {
     return <Skeleton className="h-64 w-full" />;
   }
 
-  if (!incomingCalls || incomingCalls?.length === 0) {
+  if (!calls || calls?.length === 0) {
     return (
       <div className="flex flex-col space-y-2">
         <div className="flex space-x-2 items-center">
@@ -45,7 +37,7 @@ const IncomingCalls = () => {
         {isRefetching && <Loader2 className="h-6 w-6 animate-spin" />}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2">
-        {incomingCalls?.map((call) => (
+        {calls?.map((call) => (
           <IncomingCallCard key={`call-${call.callerEmail}`} call={call} />
         ))}
       </div>
