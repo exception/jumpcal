@@ -29,7 +29,7 @@ export const env = createEnv({
     QSTASH_NEXT_SIGNING_KEY: z.string().min(1),
     QSTASH_CLIENT_TOKEN: z.string().min(1),
 
-    NGROK_URL: z.string().min(1),
+    NGROK_URL: z.string(),
   },
 
   client: {
