@@ -19,7 +19,7 @@ const formSchema = z.object({
   username: z.string().min(1).max(16),
 });
 
-const LoginForm = () => {
+const SignupForm = () => {
   const searchParams = useSearchParams();
   const next = searchParams?.get("next");
   const [clickedGoogle, setClickedGoogle] = useState(false);
@@ -85,6 +85,7 @@ const LoginForm = () => {
       </Button>
       <Button
         loading={clickedGithub}
+        disabled={!form.formState.isValid}
         size="xl"
         onClick={() => {
           setClickedGithub(true);
@@ -106,4 +107,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignupForm;

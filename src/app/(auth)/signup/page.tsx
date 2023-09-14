@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Suspense } from "react";
-import LoginForm from "./form";
+import SignupForm from "./form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import { makeMetadata } from "@/lib/utils";
@@ -9,7 +9,7 @@ export const metadata = makeMetadata({
   title: "Sign up to Jumpcal",
 });
 
-const LoginPage = () => {
+const SignupPage = () => {
   return (
     <div className="flex flex-col space-y-2 z-10 text-center w-full max-w-md mx-auto mb-auto">
       <Card>
@@ -23,7 +23,7 @@ const LoginPage = () => {
         <Separator />
         <CardContent className="flex flex-col items-center gap-y-2 pt-4">
           <Suspense fallback={<Skeleton className="h-10 w-full" />}>
-            <LoginForm />
+            <SignupForm />
           </Suspense>
           {/* <p className="text-sm text-card-foreground">
                     Don&apos;t have an account?{' '}
@@ -41,4 +41,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
