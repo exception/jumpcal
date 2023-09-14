@@ -2,6 +2,7 @@ import MaxWidthContainer from "@/components/app/max-width-container";
 import { prisma } from "@/db";
 import { notFound } from "next/navigation";
 import UserHeader from "./user-header";
+import OwnProfileBanner from "./own-profile-banner";
 
 const fetchUser = (username: string) => {
   return prisma.user.findUnique({
@@ -9,6 +10,7 @@ const fetchUser = (username: string) => {
       username,
     },
     select: {
+      id: true,
       name: true,
       username: true,
       image: true,
@@ -28,18 +30,22 @@ interface Props {
 
 const UserPage = async ({ params }: Props) => {
   const user = await fetchUser(params.username.toLowerCase());
+
   if (!user) {
     return notFound();
   }
 
   return (
-    <MaxWidthContainer className="py-10 flex items-center flex-col">
-      <UserHeader
-        name={user.name ?? ""}
-        image={user.image ?? ""}
-        description={user.description ?? ""}
-      />
-    </MaxWidthContainer>
+    <>
+      <OwnProfileBanner id={user.id} />
+      <MaxWidthContainer className="py-10 flex items-center flex-col">
+        <UserHeader
+          name={user.name ?? ""}
+          image={user.image}
+          description={user.description ?? ""}
+        />
+      </MaxWidthContainer>
+    </>
   );
 };
 

@@ -7,10 +7,23 @@ const Time = z.object({
   minute: z.number().gt(0).lte(59),
 });
 
-const TimeSlot = z.object({
-  start: Time,
-  end: Time,
-});
+const TimeSlot = z
+  .object({
+    start: Time,
+    end: Time,
+  })
+  .refine(
+    (data) => {
+      const startInMinutes = data.start.hour * 60 + data.start.minute;
+      const endInMinutes = data.end.hour * 60 + data.end.minute;
+
+      return endInMinutes > startInMinutes;
+    },
+    {
+      message: "End time must be larger than start time.",
+      path: ["end"],
+    },
+  );
 
 const DayAvailabilty = z.object({
   day: z.enum([
@@ -25,6 +38,8 @@ const DayAvailabilty = z.object({
   available: z.boolean(),
   slots: TimeSlot.array().min(1),
 });
+
+export type DayAvailability = z.infer<typeof DayAvailabilty>;
 
 export const userRoutes = createTRPCRouter({
   onboard: protectedProcedure
@@ -203,6 +218,22 @@ export const userRoutes = createTRPCRouter({
         },
         data: {
           image: secure_url,
+        },
+      });
+    }),
+  updateAvailability: protectedProcedure
+    .input(
+      z.object({
+        availability: DayAvailabilty.array(),
+      }),
+    )
+    .mutation(async ({ ctx: { session, prisma }, input }) => {
+      return prisma.user.update({
+        where: {
+          id: session.user.id,
+        },
+        data: {
+          availability: JSON.stringify(input.availability),
         },
       });
     }),

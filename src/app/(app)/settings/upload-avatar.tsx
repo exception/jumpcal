@@ -7,7 +7,7 @@ import { trpc } from "@/lib/providers/trpc-provider";
 import { Pencil, Plus, SaveIcon, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 
 const UploadAvatarRow = () => {
@@ -20,12 +20,12 @@ const UploadAvatarRow = () => {
       if (!imageContent) {
         toast({
           title: "Removed avatar",
-          description: "You have successfully removed your avatar",
+          description: "You have successfully removed your avatar!",
         });
       } else {
         toast({
           title: "Updated avatar",
-          description: "You have successfully updated your avatar",
+          description: "You have successfully updated your avatar!",
         });
       }
       setImageContent(undefined);
@@ -33,11 +33,20 @@ const UploadAvatarRow = () => {
     onError() {
       toast({
         title: "Upload failed",
-        description: "Something went wrong while uploading your avatar",
+        description: "Something went wrong while uploading your avatar!",
         variant: "destructive",
       });
     },
   });
+
+  useEffect(() => {
+    console.log(session?.user.email);
+
+    setImageContent(
+      session?.user.image ??
+        `https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=${session?.user.email}&scale=80`,
+    );
+  }, [session]);
 
   const handleDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -106,21 +115,28 @@ const UploadAvatarRow = () => {
       </Dropzone>
       <div className="flex w-full justify-between items-center">
         <p className="text-sm text-neutral-400">
-          Max file size: 3MB, only .jpg and .png are supported.
+          Max file size: <span className="font-medium">3MB</span>, only .jpg and
+          .png are supported. Default avatars provided by Dicebear.
         </p>
         <div className="flex self-end items-center space-x-2">
           {session?.user.image && (
             <Button
               disabled={uploadAvatar.isLoading}
+              loading={uploadAvatar.isLoading}
               variant="outline"
               size="sm"
               icon={<Trash className="h-4 w-4" />}
+              onClick={() => {
+                uploadAvatar.mutate({
+                  image: undefined,
+                });
+              }}
             >
               Remove
             </Button>
           )}
           <Button
-            disabled={!imageContent}
+            disabled={!imageContent || imageContent.includes("dicebear")}
             loading={uploadAvatar.isLoading}
             variant="default"
             size="sm"

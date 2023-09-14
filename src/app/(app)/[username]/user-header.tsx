@@ -3,7 +3,7 @@ import { UserIcon } from "lucide-react";
 
 interface Props {
   name: string;
-  image?: string;
+  image: string | null;
   description: string;
 }
 
@@ -11,7 +11,13 @@ const UserHeader = ({ name, image, description }: Props) => {
   return (
     <div className="flex flex-col space-y-2 items-center">
       <Avatar className="h-32 w-32 hover:scale-105 transition-all">
-        <AvatarImage src={image ?? ""} alt="" className="object-cover" />
+        <AvatarImage
+          src={
+            image ??
+            `https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=${name}&scale=80`
+          }
+          className="object-cover"
+        />
         <AvatarFallback>
           <UserIcon className="h-20 w-20" />
         </AvatarFallback>

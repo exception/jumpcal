@@ -253,3 +253,5 @@ export const getCountryFlagEmoji = (countryCode: CountryCode) => {
       .map((char) => 127397 + char.charCodeAt(0))
     return String.fromCodePoint(...codePoints)
   }
+
+export const DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];

@@ -1,27 +1,25 @@
-import { Button } from "@/components/ui/button";
-import {
-  CountryCode,
-  countryNameRecord,
-  getCountryFlagEmoji,
-} from "@/lib/constants";
-import { Call } from "@prisma/client";
-import { ArchiveX, PhoneCall, PhoneIncoming, PhoneMissed } from "lucide-react";
+import { ArchiveX, Loader2, PhoneIncoming } from "lucide-react";
 import IncomingCallCard from "./incoming-call-card";
+import { trpc } from "@/lib/providers/trpc-provider";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const IncomingCalls = () => {
-  const calls: Pick<
-    Call,
-    "countryCode" | "callerEmail" | "callerName" | "callerReason"
-  >[] = [
-    {
-      countryCode: "AR",
-      callerName: "Erik",
-      callerEmail: "erik@erosemberg.com",
-      callerReason: "I wanna chat",
-    },
-  ];
+  const {
+    data: incomingCalls,
+    isInitialLoading,
+    isRefetching,
+  } = trpc.calls.incomingCalls.useQuery(undefined, {
+    refetchInterval: 3_000, // 3 seconds
+    refetchIntervalInBackground: true,
+    retry: true,
+    retryDelay: (attempt) => attempt * 1000,
+  });
 
-  if (calls.length === 0) {
+  if (isInitialLoading) {
+    return <Skeleton className="h-64 w-full" />;
+  }
+
+  if (!incomingCalls || incomingCalls?.length === 0) {
     return (
       <div className="flex flex-col space-y-2">
         <div className="flex space-x-2 items-center">
@@ -38,10 +36,19 @@ const IncomingCalls = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2">
-      {calls.map((call) => (
-        <IncomingCallCard key={`call-${call.callerEmail}`} call={call} />
-      ))}
+    <div className="flex flex-col space-y-2">
+      <div className="flex justify-between items-center">
+        <div className="flex space-x-2 items-center">
+          <PhoneIncoming className="h-4 w-4" />
+          <h3 className="text-xl font-medium">Incoming Calls</h3>
+        </div>
+        {isRefetching && <Loader2 className="h-6 w-6 animate-spin" />}
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        {incomingCalls?.map((call) => (
+          <IncomingCallCard key={`call-${call.callerEmail}`} call={call} />
+        ))}
+      </div>
     </div>
   );
 };

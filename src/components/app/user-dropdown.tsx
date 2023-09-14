@@ -34,7 +34,10 @@ const UserDropdown = () => {
         <Button variant="ghost" className="h-8 w-8 rounded-full relative">
           <Avatar className="h-10 w-10 hover:ring-2 hover:ring-neutral-200">
             <AvatarImage
-              src={session?.user?.image ?? ""}
+              src={
+                session?.user?.image ??
+                `https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=${session?.user.email}&scale=80`
+              }
               alt=""
               className="object-cover"
             />

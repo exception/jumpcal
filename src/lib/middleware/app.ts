@@ -19,8 +19,6 @@ const AppMiddleware = async (req: NextRequest) => {
     user?: User;
   };
 
-  console.log("key", key);
-
   if (!session?.email && RESTRICTED_KEYS.has(key)) {
     return NextResponse.redirect(
       new URL(
