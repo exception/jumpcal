@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import cloudinary from "cloudinary";
-import { DayAvailability, DayAvailabilty } from "@/lib/availability";
+import { type DayAvailability, DayAvailabilty } from "@/lib/availability";
 
 const defaultSlotRange = {
   start: { hour: 9, minute: 0 },
@@ -119,7 +119,7 @@ export const userRoutes = createTRPCRouter({
     )
     .mutation(async ({ ctx: { session, prisma }, input }) => {
       if (input.type === "ZOOM") {
-        const { code } = input;
+        // const { code } = input;
 
         return prisma.integration.create({
           data: {
@@ -169,7 +169,7 @@ export const userRoutes = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx: { session, prisma }, input }) => {
-      let image = input.image;
+      const image = input.image;
       if (!image) {
         return prisma.user.update({
           where: {
@@ -223,9 +223,7 @@ export const userRoutes = createTRPCRouter({
           id: session.user.id,
         },
         data: {
-          availability: {
-            set: input.availability,
-          },
+          availability: input.availability,
         },
       });
     }),

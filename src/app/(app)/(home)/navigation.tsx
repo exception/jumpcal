@@ -6,11 +6,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
-export type NavItem = {
+export interface NavItem {
   title: string;
   href: string;
   icon?: ReactNode;
-};
+}
 
 interface Props {
   items: NavItem[];

@@ -8,18 +8,14 @@ import { cn, makeMetadata } from "@/lib/utils";
 
 export const metadata = makeMetadata();
 
-export default function RootLayout({
-  children,
-  session,
-}: {
-  children: React.ReactNode;
-  session: Session | null;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.variable)}>
-        <Providers session={session}>{children}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

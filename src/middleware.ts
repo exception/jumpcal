@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 import AppMiddleware from "@/lib/middleware/app";
 
 export const config = {

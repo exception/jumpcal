@@ -5,10 +5,10 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export type NavItem = {
+export interface NavItem {
   href: string;
   title: string;
-};
+}
 
 interface Props {
   items: NavItem[];

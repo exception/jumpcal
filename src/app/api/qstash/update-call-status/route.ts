@@ -6,7 +6,7 @@ export async function POST(req: Request) {
 
   if (process.env.VERCEL === "1") {
     const isValid = await receiver.verify({
-      signature: req.headers.get("Upstash-Signature") || "",
+      signature: req.headers.get("Upstash-Signature") ?? "",
       body: JSON.stringify(body),
     });
 

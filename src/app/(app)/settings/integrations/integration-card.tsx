@@ -14,8 +14,8 @@ interface Props {
   description: string;
   loading: boolean;
 
-  handleEnable: () => Promise<void>;
-  handleDisable: () => Promise<void>;
+  handleEnable: () => Promise<void> | void;
+  handleDisable: () => Promise<void> | void;
 }
 
 const IntegrationCard = ({
@@ -57,6 +57,7 @@ const IntegrationCard = ({
         </div>
         {loading && <Skeleton className="w-12 h-6 rounded-full" />}
         {!loading && (
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
           <Switch checked={enabled} onCheckedChange={handleValueChange} />
         )}
       </div>

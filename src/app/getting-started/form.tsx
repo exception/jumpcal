@@ -60,6 +60,9 @@ const OnboardingForm = () => {
     async onSuccess() {
       await update();
       router.push("/");
+      toast({
+        title: "Redirecting...",
+      });
     },
     onError(error) {
       toast({

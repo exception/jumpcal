@@ -20,9 +20,9 @@ const CopyProfileLink = () => {
           <Clipboard className="h-4 w-4" />
         )
       }
-      onClick={() => {
+      onClick={async () => {
         setCopied(true);
-        navigator.clipboard.writeText(
+        await navigator.clipboard.writeText(
           `https://jumpcal.com/${session?.user.username}`,
         );
         toast({

@@ -61,6 +61,7 @@ const AccountSettingsForm = () => {
     if (!form.getValues().fullName && session?.user.name) {
       form.setValue("fullName", session.user.name);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user.name]);
 
   return (

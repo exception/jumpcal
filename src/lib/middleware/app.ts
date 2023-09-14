@@ -5,6 +5,7 @@ import { type User } from "@prisma/client";
 
 const RESTRICTED_KEYS = new Set([
   "",
+  "call-log",
   "getting-started",
   "settings",
 ]);

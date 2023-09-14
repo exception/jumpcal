@@ -98,7 +98,7 @@ const SmsNotification = () => {
     } else {
       verifyCode.mutate({
         phone: form.phoneNumber,
-        code: form.code as string,
+        code: form.code!,
       });
     }
   };
@@ -159,8 +159,8 @@ const SmsNotification = () => {
         type="NOTIFICATION"
         description="Jumpcal will notify you about new calls via SMS."
         enabled={!!session?.user.phoneNumber}
-        handleDisable={async () => removeSms.mutate()}
-        handleEnable={async () => {
+        handleDisable={() => removeSms.mutate()}
+        handleEnable={() => {
           setEnabling(true);
         }}
       />

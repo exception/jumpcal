@@ -3,15 +3,11 @@
 import { Toaster } from "@/components/ui/toaster";
 import IncomingCallsProvider from "@/lib/providers/incoming-calls-provider";
 import { TrpcProvider } from "@/lib/providers/trpc-provider";
-import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 
-const Providers = ({
-  children,
-  session,
-}: React.PropsWithChildren<{ session: Session | null }>) => {
+const Providers = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <TrpcProvider>
         <IncomingCallsProvider>{children}</IncomingCallsProvider>
       </TrpcProvider>

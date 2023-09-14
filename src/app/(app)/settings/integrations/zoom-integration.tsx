@@ -77,12 +77,12 @@ const ZoomIntegration = () => {
         name="Zoom"
         description="Jumpcal will create Zoom Meetings when calls are accepted."
         enabled={data ?? false}
-        handleDisable={async () =>
+        handleDisable={() =>
           removeIntegration.mutate({
             type: "ZOOM",
           })
         }
-        handleEnable={async () => {
+        handleEnable={() => {
           openZoomIntegration();
         }}
       />

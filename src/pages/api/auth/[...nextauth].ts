@@ -1,10 +1,10 @@
-import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
+import NextAuth, { type DefaultSession, type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import { env } from "@/env.mjs";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db";
-import { User } from "@prisma/client";
+import { type User } from "@prisma/client";
 
 const VERCEL_DEPLOYMENT = process.env.VERCEL === "1";
 
@@ -93,8 +93,10 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     session: ({ session, token }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       session.user = {
         id: token.sub,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         ...(token || session).user,
       };

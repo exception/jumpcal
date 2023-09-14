@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Account {
@@ -16,16 +17,17 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? // @db.Text
-  access_token      String? // @db.Text
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? // @db.Text
+  id_token          String? @db.Text
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -34,6 +36,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -53,7 +57,7 @@ model User {
   image         String?
 
   description  String?
-  availability Json[]  @db.JsonB
+  availability Json?   @db.Json
   timezone     String?
   phoneNumber  String?
   calendarLink String?
@@ -97,9 +101,11 @@ model Call {
   createdAt  DateTime  @default(now())
   acceptedAt DateTime?
 
-  target User @relation(name: "call_receiver", fields: [userId], references: [id])
+  target User @relation(name: "call_receiver", fields: [userId], references: [id], onDelete: Cascade)
 
   userId String
+
+  @@index([userId])
 }
 
 enum IntegrationType {
@@ -114,7 +120,7 @@ model Integration {
 
   createdAt DateTime @default(now())
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
   @@unique([userId, type])
