@@ -5,12 +5,10 @@ import Modal from "@/components/ui/modal";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
-import { Loader2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 interface Props {
+  type?: "NOTIFICATION" | "CALL";
   enabled: boolean;
   name: string;
   description: string;
@@ -27,8 +25,8 @@ const IntegrationCard = ({
   handleEnable,
   handleDisable,
   loading,
+  type = "CALL",
 }: Props) => {
-  const { toast } = useToast();
   const [modalOpen, setModalOpen] = useState(false);
   const [enabling, setEnabling] = useState(false);
 
@@ -37,7 +35,8 @@ const IntegrationCard = ({
       setEnabling(true);
       await handleEnable();
     } finally {
-      //   setEnabling(false);
+      setModalOpen(false);
+      // setEnabling(false);
     }
   };
 
@@ -63,10 +62,18 @@ const IntegrationCard = ({
       </div>
       <Modal open={modalOpen} setOpen={setModalOpen}>
         <div className="flex flex-col space-y-2 w-full">
-          <h2 className="text-lg font-medium">Enable {name} Integration</h2>
+          <h2 className="text-lg font-medium">
+            Enable {name} {type === "CALL" ? "Integration" : "Notification"}
+          </h2>
           <p className="text-sm text-neutral-400">
-            You are about to enable the {name} integration. You will be
-            redirected to {name}&apos;s website to finish the setup.
+            {type === "CALL" ? (
+              <>
+                You are about to enable the {name} integration. You will be
+                redirected to {name}&apos;s website to finish the setup.
+              </>
+            ) : (
+              <>You are about to enable notifications via {name}.</>
+            )}
           </p>
           <Separator className="!my-3" />
           <div className="flex flex-row space-x-2">

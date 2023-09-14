@@ -19,6 +19,10 @@ const navItems: NavItem[] = [
     href: "/settings/integrations",
     title: "Integrations",
   },
+  {
+    href: "/settings/notifications",
+    title: "Notifications",
+  },
 ];
 
 const SettingsPage = ({ children }: React.PropsWithChildren<unknown>) => {

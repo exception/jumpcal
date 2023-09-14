@@ -14,7 +14,7 @@ const UserHeader = ({ name, image, description }: Props) => {
         <AvatarImage
           src={
             image ??
-            `https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=${name}&scale=80`
+            `https://api.dicebear.com/7.x/lorelei/svg?seed=${name}&scale=80&backgroundColor=ec4899`
           }
           className="object-cover"
         />

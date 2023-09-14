@@ -44,7 +44,7 @@ const UploadAvatarRow = () => {
 
     setImageContent(
       session?.user.image ??
-        `https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=${session?.user.email}&scale=80`,
+        `https://api.dicebear.com/7.x/lorelei/svg?seed=${session?.user.name}&scale=80&backgroundColor=ec4899`,
     );
   }, [session]);
 
@@ -93,7 +93,7 @@ const UploadAvatarRow = () => {
       >
         {({ getRootProps, getInputProps }) => (
           <div
-            className="border-neutral-200 group relative h-32 w-32 shrink-0 overflow-hidden rounded-full border hover:cursor-pointer hover:bg-neutral-500 hover:opacity-75 opacity-100 active:scale-95 transition-all"
+            className="border-neutral-200 group relative h-24 w-24 md:h-32 md:w-32 shrink-0 overflow-hidden rounded-full border hover:cursor-pointer hover:bg-neutral-500 hover:opacity-75 opacity-100 active:scale-95 transition-all"
             {...getRootProps()}
           >
             <Image
@@ -114,7 +114,7 @@ const UploadAvatarRow = () => {
         )}
       </Dropzone>
       <div className="flex w-full justify-between items-center">
-        <p className="text-sm text-neutral-400">
+        <p className="text-xs md:text-sm text-neutral-400">
           Max file size: <span className="font-medium">3MB</span>, only .jpg and
           .png are supported. Default avatars provided by Dicebear.
         </p>

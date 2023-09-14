@@ -36,7 +36,7 @@ const UserDropdown = () => {
             <AvatarImage
               src={
                 session?.user?.image ??
-                `https://api.dicebear.com/7.x/avataaars-neutral/svg?seed=${session?.user.email}&scale=80`
+                `https://api.dicebear.com/7.x/lorelei/svg?seed=${session?.user.name}&scale=80&backgroundColor=ec4899`
               }
               alt=""
               className="object-cover"
