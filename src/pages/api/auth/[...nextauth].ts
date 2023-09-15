@@ -13,7 +13,7 @@ declare module "next-auth" {
 }
 
 export const authOptions: NextAuthOptions = {
-  debug: true,
+  // debug: true,
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
