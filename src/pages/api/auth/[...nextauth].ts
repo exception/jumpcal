@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        domain: VERCEL_DEPLOYMENT ? "." : undefined,
+        domain: VERCEL_DEPLOYMENT ? ".vercel.app" : undefined,
         secure: VERCEL_DEPLOYMENT,
       },
     },
