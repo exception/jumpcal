@@ -2,7 +2,7 @@
 
 import MaxWidthContainer from "@/components/app/max-width-container";
 import { Separator } from "@/components/ui/separator";
-import Navigation, { NavItem } from "./navigation";
+import Navigation, { type NavItem } from "./navigation";
 import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 

@@ -8,7 +8,12 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { capitalize, cn } from "@/lib/utils";
-import { Day, DayAvailability, Time, TimeSlot } from "@/lib/availability";
+import {
+  type Day,
+  type DayAvailability,
+  type Time,
+  type TimeSlot,
+} from "@/lib/availability";
 import { Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -93,6 +98,7 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
         slots: timeRanges,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeRanges]);
 
   const handleTimeChange = (

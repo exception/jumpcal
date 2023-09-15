@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, SetStateAction } from "react";
+import { type Dispatch, type SetStateAction } from "react";
 import { Drawer } from "vaul";
 import { Dialog, DialogContent } from "./dialog";
 import { useMediaQuery } from "@/lib/hooks/use-media-query";

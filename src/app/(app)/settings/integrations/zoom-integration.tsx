@@ -54,6 +54,7 @@ const ZoomIntegration = () => {
       setIntegrating(true);
       enableIntegration.mutate({ type: "ZOOM", code });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openZoomIntegration = () => {

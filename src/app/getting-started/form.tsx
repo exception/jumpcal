@@ -54,6 +54,7 @@ const OnboardingForm = () => {
       form.setValue("fullName", session.user.name);
       // TODO add slugified full name as username
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user.name]);
 
   const onboardUserMutation = trpc.users.onboard.useMutation({

@@ -1,7 +1,6 @@
 // app/layout.tsx
 import "./globals.css";
 
-import { type Session } from "next-auth";
 import Providers from "./providers";
 import { inter } from "@/lib/fonts";
 import { cn, makeMetadata } from "@/lib/utils";

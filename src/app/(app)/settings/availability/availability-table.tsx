@@ -4,7 +4,7 @@ import { trpc } from "@/lib/providers/trpc-provider";
 import DayAvailabilityRow from "./day-availability-row";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect, useState } from "react";
-import { Day, DayAvailability } from "@/lib/availability";
+import { type Day, type DayAvailability } from "@/lib/availability";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";

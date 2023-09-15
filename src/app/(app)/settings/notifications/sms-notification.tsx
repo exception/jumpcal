@@ -88,6 +88,7 @@ const SmsNotification = () => {
     if (smsSent) {
       form.register("code");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [smsSent]);
 
   const handleSubmit = (form: z.infer<typeof formSchema>) => {

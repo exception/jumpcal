@@ -1,5 +1,5 @@
 import { useToast } from "@/components/ui/use-toast";
-import { Call } from "@prisma/client";
+import { type Call } from "@prisma/client";
 import { usePathname } from "next/navigation";
 import React, { useContext, useEffect, useRef } from "react";
 import { trpc } from "./trpc-provider";
@@ -52,6 +52,7 @@ const IncomingCallsProvider = ({
 
     // ! FIX: length check is not very reliable here.
     previousCallsRef.current = incomingCalls?.length ?? 0;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, incomingCalls, status]);
 
   return (

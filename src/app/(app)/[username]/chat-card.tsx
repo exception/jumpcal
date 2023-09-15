@@ -1,6 +1,6 @@
 "use client";
 
-import { DayAvailability, isUserAvailable } from "@/lib/availability";
+import { type DayAvailability, isUserAvailable } from "@/lib/availability";
 import { useState } from "react";
 
 interface Props {

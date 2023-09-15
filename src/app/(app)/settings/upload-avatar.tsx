@@ -1,10 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { trpc } from "@/lib/providers/trpc-provider";
-import { Pencil, Plus, SaveIcon, Trash } from "lucide-react";
+import { Pencil, SaveIcon, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";

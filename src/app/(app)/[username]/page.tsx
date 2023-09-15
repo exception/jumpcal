@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import UserHeader from "./user-header";
 import OwnProfileBanner from "./own-profile-banner";
 import ChatCard from "./chat-card";
-import { DayAvailability } from "@/lib/availability";
+import { type DayAvailability } from "@/lib/availability";
 
 const fetchUser = (username: string) => {
   return prisma.user.findUnique({
