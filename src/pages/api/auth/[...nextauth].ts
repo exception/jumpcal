@@ -6,7 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db";
 import { type User } from "@prisma/client";
 
-const VERCEL_DEPLOYMENT = process.env.VERCEL === "1";
+const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
