@@ -1,6 +1,6 @@
 import JumpcalLogoFull from "@/components/ui/icons/jumpcal-logo-full";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 const AuthLayout = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
