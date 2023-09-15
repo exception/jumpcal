@@ -58,7 +58,15 @@ const ZoomIntegration = () => {
   }, []);
 
   const openZoomIntegration = () => {
-    const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${env.NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fsettings%2Fintegrations%3Fzoom%3Dtrue`;
+    const redirectUri =
+      process.env.VERCEL === "1"
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/settings/integrations?zoom=true`
+        : "http://localhost:3000/settings/integrations?zoom=true";
+
+    const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${
+      env.NEXT_PUBLIC_ZOOM_CLIENT_ID
+    }&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
     window.location.replace(url);
   };
 
