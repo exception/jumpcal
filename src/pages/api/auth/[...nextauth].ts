@@ -6,8 +6,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db";
 import { type User } from "@prisma/client";
 
-const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
-
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: User;
@@ -34,18 +32,6 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
-  },
-  cookies: {
-    sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        domain: VERCEL_DEPLOYMENT ? ".vercel.app" : undefined,
-        secure: VERCEL_DEPLOYMENT,
-      },
-    },
   },
   pages: {
     error: "/signin",
