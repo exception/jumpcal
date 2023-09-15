@@ -8,6 +8,7 @@ import { trpc } from "@/lib/providers/trpc-provider";
 import Modal from "@/components/ui/modal";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { IS_ON_VERCEL } from "@/lib/constants";
 
 const ZoomIntegration = () => {
   const searchParams = useSearchParams();
@@ -58,10 +59,9 @@ const ZoomIntegration = () => {
   }, []);
 
   const openZoomIntegration = () => {
-    const redirectUri =
-      process.env.VERCEL === "1"
-        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/settings/integrations?zoom=true`
-        : "http://localhost:3000/settings/integrations?zoom=true";
+    const redirectUri = IS_ON_VERCEL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/settings/integrations?zoom=true`
+      : "http://localhost:3000/settings/integrations?zoom=true";
 
     const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${
       env.NEXT_PUBLIC_ZOOM_CLIENT_ID

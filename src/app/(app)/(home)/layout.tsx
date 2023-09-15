@@ -1,5 +1,5 @@
 import MaxWidthContainer from "@/components/app/max-width-container";
-import Navigation, { NavItem } from "./navigation";
+import Navigation, { type NavItem } from "./navigation";
 import Greeter from "./greeter";
 import DoNotDisturbToggle from "./do-not-disturb-toggle";
 import { Home, PhoneIncoming } from "lucide-react";

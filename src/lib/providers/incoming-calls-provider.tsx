@@ -23,17 +23,19 @@ const IncomingCallsProvider = ({
   const pathname = usePathname();
   const { toast } = useToast();
   const { status } = useSession();
+  const { data: hasIntegrations } = trpc.users.hasIntegrations.useQuery();
 
   const {
     data: incomingCalls,
     isInitialLoading,
     isRefetching,
   } = trpc.calls.incomingCalls.useQuery(undefined, {
-    refetchInterval: 3_000, // 3 seconds
+    refetchInterval: 5_000, // 5 seconds
     refetchIntervalInBackground: true,
     retry: true,
     retryDelay: (attempt) => attempt * 1000,
-    enabled: status === "authenticated",
+    // only fetch incoming calls if user is authenticated and has integrations
+    enabled: status === "authenticated" && hasIntegrations,
   });
 
   const previousCallsRef = useRef(0);

@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  CountryCode,
+  type CountryCode,
   countryNameRecord,
   getCountryFlagEmoji,
 } from "@/lib/constants";
-import { Call } from "@prisma/client";
+import { type Call } from "@prisma/client";
 import { PhoneCall, PhoneMissed } from "lucide-react";
 import { useState } from "react";
 

@@ -1,4 +1,4 @@
-import { Loader2, PhoneIncoming } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import IncomingCallCard from "./incoming-call-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useIncomingCalls } from "@/lib/providers/incoming-calls-provider";

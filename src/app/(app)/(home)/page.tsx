@@ -2,9 +2,8 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { trpc } from "@/lib/providers/trpc-provider";
-import { ArchiveX, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import IncomingCalls from "./incoming-calls";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

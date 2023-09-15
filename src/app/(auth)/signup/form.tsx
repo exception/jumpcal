@@ -71,7 +71,7 @@ const SignupForm = () => {
       <Separator />
       <Button
         loading={clickedGoogle}
-        disabled={!form.formState.isValid}
+        disabled={!form.formState.isValid || clickedGithub}
         size="xl"
         onClick={() => {
           setClickedGoogle(true);
@@ -85,7 +85,7 @@ const SignupForm = () => {
       </Button>
       <Button
         loading={clickedGithub}
-        disabled={!form.formState.isValid}
+        disabled={!form.formState.isValid || clickedGoogle}
         size="xl"
         onClick={() => {
           setClickedGithub(true);

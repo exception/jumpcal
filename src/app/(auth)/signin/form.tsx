@@ -31,6 +31,7 @@ const LoginForm = () => {
     <div className="space-y-4">
       <Button
         loading={clickedGoogle}
+        disabled={clickedGithub}
         size="xl"
         onClick={() => {
           setClickedGoogle(true);
@@ -44,6 +45,7 @@ const LoginForm = () => {
       </Button>
       <Button
         loading={clickedGithub}
+        disabled={clickedGoogle}
         size="xl"
         onClick={() => {
           setClickedGithub(true);

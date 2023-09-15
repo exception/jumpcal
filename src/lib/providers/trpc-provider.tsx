@@ -27,7 +27,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
     trpc.createClient({
       links: [
         loggerLink({
-          enabled: () => true,
+          enabled: () => process.env.NODE_ENV !== "production",
         }),
         httpBatchLink({
           url: "/api/trpc",
@@ -47,7 +47,7 @@ export const TrpcProvider: React.FC<{ children: React.ReactNode }> = ({
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         {children}
-        <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
+        <ReactQueryDevtools position="bottom-left" initialIsOpen={false} />
       </QueryClientProvider>
     </trpc.Provider>
   );

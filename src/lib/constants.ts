@@ -257,3 +257,5 @@ export const getCountryFlagEmoji = (countryCode: CountryCode) => {
 export const DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
 
 export const API_DOMAIN = process.env.NEXT_PUBLIC_VERCEL_ENV === "production" ? "https://jumpcal.com/" : process.env.NGROK_URL;
+
+export const IS_ON_VERCEL = !!process.env.VERCEL_URL;
