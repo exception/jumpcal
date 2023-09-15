@@ -5,7 +5,7 @@ import { httpBatchLink, getFetch, loggerLink } from "@trpc/client";
 import { useState } from "react";
 import superjson from "superjson";
 import { createTRPCReact } from "@trpc/react-query";
-import { AppRouter } from "@/server/root";
+import { type AppRouter } from "@/server/root";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 type trpcClient = ReturnType<typeof createTRPCReact<AppRouter>>;
