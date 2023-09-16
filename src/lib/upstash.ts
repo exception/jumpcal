@@ -8,7 +8,7 @@ const receiver = new Receiver({
 
 const qstash = new Client({
   token: env.QSTASH_CLIENT_TOKEN,
-  baseUrl: "https://qstash.upstash.io/v2/publish/"
+//   baseUrl: "https://qstash.upstash.io/v2/publish/"
 });
 
 export { receiver, qstash };

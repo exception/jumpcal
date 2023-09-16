@@ -62,6 +62,7 @@ model User {
   phoneNumber  String?
   calendarLink String?
   dnd          Boolean @default(false)
+  layout       Layout  @default(VERTICAL)
 
   joinedAt  DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -71,6 +72,11 @@ model User {
 
   callLog      Call[]        @relation(name: "call_receiver")
   integrations Integration[]
+}
+
+enum Layout {
+  VERTICAL
+  HORIZONTAL
 }
 
 enum CallHost {

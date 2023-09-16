@@ -3,8 +3,9 @@ import { prisma } from "@/db";
 import { notFound } from "next/navigation";
 import UserHeader from "./user-header";
 import OwnProfileBanner from "./own-profile-banner";
-import ChatCard from "./chat-card";
+import AvailabilityCard from "./availability-card";
 import { type DayAvailability } from "@/lib/availability";
+import { cn } from "@/lib/utils";
 
 const fetchUser = (username: string) => {
   return prisma.user.findUnique({
@@ -21,6 +22,7 @@ const fetchUser = (username: string) => {
       calendarLink: true,
       availability: true,
       timezone: true,
+      layout: true,
     },
   });
 };
@@ -41,16 +43,27 @@ const UserPage = async ({ params }: Props) => {
   return (
     <>
       <OwnProfileBanner id={user.id} />
-      <MaxWidthContainer className="py-10 flex items-center flex-col">
+      <MaxWidthContainer
+        className={cn(
+          "py-10 flex",
+          user.layout === "VERTICAL"
+            ? "flex-col space-y-4 items-center"
+            : "flex-row space-x-6 items-start",
+        )}
+      >
         <UserHeader
           name={user.name ?? ""}
           image={user.image}
           description={user.description ?? ""}
+          layout={user.layout}
         />
-        <ChatCard
+        <AvailabilityCard
+          id={user.id}
           dnd={user.dnd}
           availability={user.availability as DayAvailability[]}
           timezone={user.timezone ?? ""}
+          layout={user.layout}
+          name={user.name ?? ""}
         />
       </MaxWidthContainer>
     </>

@@ -2,7 +2,7 @@
 
 import { env } from "@/env.mjs";
 import IntegrationCard from "./integration-card";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { trpc } from "@/lib/providers/trpc-provider";
 import Modal from "@/components/ui/modal";
@@ -15,6 +15,7 @@ const ZoomIntegration = () => {
   const zoom = searchParams?.get("zoom");
   const code = searchParams?.get("code");
   const { toast } = useToast();
+  const router = useRouter();
 
   const { data, isLoading, refetch } = trpc.users.hasIntegration.useQuery({
     type: "ZOOM",
@@ -67,7 +68,7 @@ const ZoomIntegration = () => {
       env.NEXT_PUBLIC_ZOOM_CLIENT_ID
     }&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
-    window.location.replace(url);
+    router.push(url);
   };
 
   return (

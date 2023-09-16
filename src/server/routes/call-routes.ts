@@ -2,7 +2,8 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { env } from "@/env.mjs";
 import { qstash } from "@/lib/upstash";
-import { API_DOMAIN } from "@/lib/constants";
+import { API_DOMAIN, DEFAULT_RING_DURATION } from "@/lib/constants";
+import { DateTime } from "luxon";
 
 export const callRoutes = createTRPCRouter({
   requestCall: publicProcedure
@@ -34,15 +35,14 @@ export const callRoutes = createTRPCRouter({
         },
       });
 
-      await qstash.schedules.create({
-        delay: 60, //? let call ring for 60 seconds
+
+      await qstash.publishJSON({
+        delay: DEFAULT_RING_DURATION,
         method: "POST",
-        body: JSON.stringify({ callId: call.id }),
-        headers: {
-          "Content-Type": "application/json",
+        body: {
+            callId: call.id
         },
-        destination: `${API_DOMAIN}/api/qstash/update-call-status`,
-        cron: "",
+        url: `${API_DOMAIN}/api/qstash/update-call-status`
       });
 
       const target = await prisma.user.findUnique({
@@ -51,26 +51,32 @@ export const callRoutes = createTRPCRouter({
         },
         select: {
           phoneNumber: true,
+          dnd: true
         },
       });
 
-      if (target?.phoneNumber) {
+      if (target?.phoneNumber && !target.dnd) {
         await twilio.messages.create({
           from: env.TWILIO_PHONE_NUMBER,
           to: target.phoneNumber,
-          body: `You have a new Jumpcal meeting request from ${input.caller.name} who wants to talk about "${input.caller.reason}"`,
+          body: `You have a new Jumpcal meeting request from ${input.caller.name} who wants to talk about "${input.caller.reason}".`,
         });
       }
 
-      return true;
+      return call;
     }),
-  incomingCalls: protectedProcedure.query(({ ctx: { session, prisma } }) => {
+  incomingCalls: protectedProcedure.query(async ({ ctx: { session, prisma } }) => {
+    const past = DateTime.now().minus({ seconds: DEFAULT_RING_DURATION });
+
     return prisma.call.findMany({
       where: {
         status: "PENDING",
         target: {
           id: session.user.id,
         },
+        createdAt: {
+            gt: past.toJSDate()
+        }
       },
     });
   }),

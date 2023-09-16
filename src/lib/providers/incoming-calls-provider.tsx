@@ -23,7 +23,12 @@ const IncomingCallsProvider = ({
   const pathname = usePathname();
   const { toast } = useToast();
   const { status } = useSession();
-  const { data: hasIntegrations } = trpc.users.hasIntegrations.useQuery();
+  const { data: hasIntegrations } = trpc.users.hasIntegrations.useQuery(
+    undefined,
+    {
+      enabled: status === "authenticated",
+    },
+  );
 
   const {
     data: incomingCalls,

@@ -259,3 +259,5 @@ export const DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SA
 export const API_DOMAIN = process.env.NEXT_PUBLIC_VERCEL_ENV === "production" ? "https://jumpcal.com/" : process.env.NGROK_URL;
 
 export const IS_ON_VERCEL = !!process.env.VERCEL_URL;
+
+export const DEFAULT_RING_DURATION = 60; // 1 minute

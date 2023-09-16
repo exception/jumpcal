@@ -18,3 +18,11 @@ export const makeMetadata = ({ title = "Jumpcal" }: MetadataProps = {}): Metadat
 }
 
 export const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const firstName = (fullName: string) => {
+  if (!fullName) {
+    return "";
+  }
+
+  return fullName.split(' ')[0];
+}
