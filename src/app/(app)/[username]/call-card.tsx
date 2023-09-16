@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, PhoneCall, PhoneMissedIcon } from "lucide-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -123,7 +123,7 @@ const CallCard = ({ target, name }: Props) => {
             )}
           />
           <Button
-            className="float-right"
+            className="self-end"
             icon={<PhoneCall className="h-4 w-4" />}
             loading={requestCall.isLoading}
             disabled={!form.formState.isValid}

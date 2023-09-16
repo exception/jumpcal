@@ -35,14 +35,13 @@ export const callRoutes = createTRPCRouter({
         },
       });
 
-
       await qstash.publishJSON({
         delay: DEFAULT_RING_DURATION,
         method: "POST",
         body: {
-            callId: call.id
+          callId: call.id,
         },
-        url: `${API_DOMAIN}/api/qstash/update-call-status`
+        url: `${API_DOMAIN}/api/qstash/update-call-status`,
       });
 
       const target = await prisma.user.findUnique({
@@ -51,7 +50,7 @@ export const callRoutes = createTRPCRouter({
         },
         select: {
           phoneNumber: true,
-          dnd: true
+          dnd: true,
         },
       });
 
@@ -65,21 +64,23 @@ export const callRoutes = createTRPCRouter({
 
       return call;
     }),
-  incomingCalls: protectedProcedure.query(async ({ ctx: { session, prisma } }) => {
-    const past = DateTime.now().minus({ seconds: DEFAULT_RING_DURATION });
+  incomingCalls: protectedProcedure.query(
+    async ({ ctx: { session, prisma } }) => {
+      const past = DateTime.now().minus({ seconds: DEFAULT_RING_DURATION });
 
-    return prisma.call.findMany({
-      where: {
-        status: "PENDING",
-        target: {
-          id: session.user.id,
+      return prisma.call.findMany({
+        where: {
+          status: "PENDING",
+          target: {
+            id: session.user.id,
+          },
+          createdAt: {
+            gt: past.toJSDate(),
+          },
         },
-        createdAt: {
-            gt: past.toJSDate()
-        }
-      },
-    });
-  }),
+      });
+    },
+  ),
   callStatus: publicProcedure
     .input(
       z.object({
@@ -92,11 +93,11 @@ export const callRoutes = createTRPCRouter({
           id: input.callId,
         },
         select: {
-            createdAt: true,
-            status: true,
-            link: true,
-            hostedOn: true
-        }
+          createdAt: true,
+          status: true,
+          link: true,
+          hostedOn: true,
+        },
       });
 
       if (!call) {
@@ -109,6 +110,22 @@ export const callRoutes = createTRPCRouter({
         date.getTime() - call.createdAt.getTime();
       const differenceInSeconds = differenceInMilliseconds / 1000;
 
-      return { status: call.status, ringingFor: differenceInSeconds, host: { type: call.hostedOn, link: call.link } };
+      return {
+        status: call.status,
+        ringingFor: differenceInSeconds,
+        host: { type: call.hostedOn, link: call.link },
+      };
+    }),
+  reject: protectedProcedure
+    .input(z.object({ callId: z.string() }))
+    .mutation(({ ctx: { prisma }, input }) => {
+      return prisma.call.update({
+        where: {
+          id: input.callId,
+        },
+        data: {
+          status: "REJECTED",
+        },
+      });
     }),
 });

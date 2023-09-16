@@ -91,7 +91,7 @@ const AvailabilityContent = () => {
           />
           <Button
             disabled={!form.formState.isDirty || !form.formState.isValid}
-            className="float-right self-end mt-2"
+            className="mt-2"
             icon={<SaveIcon className="w-4 h-4" />}
             loading={saveTimezone.isLoading}
           >

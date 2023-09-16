@@ -94,7 +94,6 @@ const AccountSettingsForm = () => {
         />
         <Button
           disabled={!form.formState.isDirty || !form.formState.isValid}
-          className="float-right"
           icon={<SaveIcon className="w-4 h-4" />}
           loading={updateUser.isLoading}
         >

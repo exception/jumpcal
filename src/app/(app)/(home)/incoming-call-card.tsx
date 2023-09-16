@@ -6,6 +6,7 @@ import {
   countryNameRecord,
   getCountryFlagEmoji,
 } from "@/lib/constants";
+import { trpc } from "@/lib/providers/trpc-provider";
 import { type Call } from "@prisma/client";
 import { PhoneCall, PhoneMissed } from "lucide-react";
 import { useState } from "react";
@@ -13,12 +14,17 @@ import { useState } from "react";
 interface Props {
   call: Pick<
     Call,
-    "countryCode" | "callerEmail" | "callerName" | "callerReason"
+    "id" | "countryCode" | "callerEmail" | "callerName" | "callerReason"
   >;
 }
 
 const IncomingCallCard = ({ call }: Props) => {
-  const [rejecting, setRejecting] = useState(false);
+  const utils = trpc.useContext();
+  const rejectCall = trpc.calls.reject.useMutation({
+    async onSuccess() {
+      await utils.calls.incomingCalls.refetch();
+    },
+  });
   const [accepting, setAccepting] = useState(false);
 
   return (
@@ -49,19 +55,23 @@ const IncomingCallCard = ({ call }: Props) => {
           size="sm"
           variant="secondary"
           className="w-full"
-          loading={rejecting}
+          loading={rejectCall.isLoading}
           icon={<PhoneMissed className="h-3 w-3" />}
           disabled={accepting}
-          onClick={() => setRejecting(true)}
+          onClick={() =>
+            rejectCall.mutate({
+              callId: call.id,
+            })
+          }
         >
-          {rejecting ? "Rejecting" : "Reject"}
+          {rejectCall.isLoading ? "Rejecting" : "Reject"}
         </Button>
         <Button
           size="sm"
           className="w-full"
           loading={accepting}
           icon={<PhoneCall className="h-3 w-3" />}
-          disabled={rejecting}
+          disabled={rejectCall.isLoading}
           onClick={() => setAccepting(true)}
         >
           {accepting ? "Connecting" : "Accept"}

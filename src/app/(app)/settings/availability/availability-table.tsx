@@ -76,7 +76,7 @@ const AvailabilityTable = () => {
           </div>
           <Button
             icon={<Save className="h-4 w-4" />}
-            className="self-end float-right mt-2"
+            className="self-start mt-2"
             disabled={!availability || !changed}
             loading={updateAvailability.isLoading}
             onClick={() =>
