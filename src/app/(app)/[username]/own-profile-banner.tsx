@@ -16,8 +16,7 @@ const OwnProfileBanner = ({ id }: Props) => {
     <div className="py-4 bg-neutral-100 border-b border-b-neutral-200">
       <MaxWidthContainer className="flex items-center justify-center">
         <p className="text-neutral-500 font-medium text-center text-sm md:text-base">
-          You are viewing your own profile. Call scheduling won&apos;t be
-          available.
+          You are viewing your own profile. Calling won&apos;t be available.
         </p>
       </MaxWidthContainer>
     </div>

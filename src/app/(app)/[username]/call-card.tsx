@@ -73,10 +73,11 @@ const CallCard = ({ target, name }: Props) => {
       setCanceled(true);
     } else if (call?.status === "ANSWERED") {
       if (call?.host?.link) {
-        router.push(call.host.link);
+        void router.push(call.host.link);
       }
     }
-  }, [call]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [call, canceled]);
 
   if (!callId) {
     return (

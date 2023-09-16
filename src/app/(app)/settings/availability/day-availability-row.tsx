@@ -152,7 +152,7 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
         isAvailable && "bg-white",
       )}
     >
-      <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-5">
+      <div className="flex flex-col space-y-2">
         <div className="flex flex-row items-center space-x-2">
           <Switch
             checked={isAvailable}

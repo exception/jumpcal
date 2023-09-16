@@ -18,7 +18,6 @@ const fetchUser = (username: string) => {
       username: true,
       image: true,
       description: true,
-      dnd: true,
       calendarLink: true,
       availability: true,
       timezone: true,
@@ -59,7 +58,6 @@ const UserPage = async ({ params }: Props) => {
         />
         <AvailabilityCard
           id={user.id}
-          dnd={user.dnd}
           availability={user.availability as DayAvailability[]}
           timezone={user.timezone ?? ""}
           layout={user.layout}

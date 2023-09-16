@@ -3,7 +3,7 @@
 import { trpc } from "@/lib/providers/trpc-provider";
 import DayAvailabilityRow from "./day-availability-row";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { type Day, type DayAvailability } from "@/lib/availability";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
@@ -61,30 +61,34 @@ const AvailabilityTable = () => {
       <h5 className="text-sm font-medium text-neutrals-500 mb-2">
         Weekly Schedule
       </h5>
-      <div className="w-full divide-y divide-neutrals-100 overflow-hidden rounded-lg border border-neutrals-100 bg-neutrals-50">
-        {availability.map((day) => (
-          <DayAvailabilityRow
-            day={day.day}
-            available={day.available}
-            slots={day.slots}
-            key={`day-${day.day}`}
-            onDayChange={handleDayChange}
-          />
-        ))}
-      </div>
-      <Button
-        icon={<Save className="h-4 w-4" />}
-        className="self-end float-right mt-2"
-        disabled={!availability || !changed}
-        loading={updateAvailability.isLoading}
-        onClick={() =>
-          updateAvailability.mutate({
-            availability,
-          })
-        }
-      >
-        Save
-      </Button>
+      <Suspense fallback={<Skeleton className="flex h-96 w-full" />}>
+        <>
+          <div className="w-full divide-y divide-neutrals-100 overflow-hidden rounded-lg border border-neutrals-100 bg-neutrals-50">
+            {availability.map((day) => (
+              <DayAvailabilityRow
+                day={day.day}
+                available={day.available}
+                slots={day.slots}
+                key={`day-${day.day}`}
+                onDayChange={handleDayChange}
+              />
+            ))}
+          </div>
+          <Button
+            icon={<Save className="h-4 w-4" />}
+            className="self-end float-right mt-2"
+            disabled={!availability || !changed}
+            loading={updateAvailability.isLoading}
+            onClick={() =>
+              updateAvailability.mutate({
+                availability,
+              })
+            }
+          >
+            Save
+          </Button>
+        </>
+      </Suspense>
     </div>
   );
 };

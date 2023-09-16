@@ -18,7 +18,6 @@ import {
 
 interface Props {
   id: string;
-  dnd?: boolean;
   availability: DayAvailability[];
   timezone: string;
   layout: Layout;
@@ -27,7 +26,6 @@ interface Props {
 
 const AvailabilityCard = ({
   id,
-  dnd,
   availability,
   timezone,
   layout = "VERTICAL",
@@ -66,39 +64,52 @@ const AvailabilityCard = ({
           </div>
         )}
         <motion.div className="flex items-center justify-between">
-          <p className="text-lg font-medium">
-            {available
-              ? "I can chat right now!"
-              : `${displayName} is away right now.`}
-          </p>
-          {isSelf ? (
-            <Tooltip>
-              <TooltipTrigger>
+          <div className="flex flex-col">
+            <p className="text-lg font-medium">
+              {available
+                ? "I can chat right now!"
+                : `${displayName} is away right now.`}
+            </p>
+            {!available && (
+              <p className="text-sm font-normal text-neutral-400">
+                You can schedule a call with {displayName} using the cards
+                below, if not, you can wait for {displayName} to be available
+                again!
+              </p>
+            )}
+          </div>
+          {available && (
+            <>
+              {isSelf ? (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      size="sm"
+                      disabled={isSelf}
+                      onClick={() => setExpanded(!expanded)}
+                    >
+                      Call me! <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="w-40 text-center">
+                    <p>Calling is disabled as this is your own profile.</p>
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
                 <Button
                   size="sm"
                   disabled={isSelf}
                   onClick={() => setExpanded(!expanded)}
                 >
-                  Call me! <ArrowRight className="h-4 w-4" />
+                  Call me!{" "}
+                  {expanded ? (
+                    <ArrowDown className="h-4 w-4" />
+                  ) : (
+                    <ArrowRight className="h-4 w-4" />
+                  )}
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent className="w-40 text-center">
-                <p>Calling is disabled as this is your own profile.</p>
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <Button
-              size="sm"
-              disabled={isSelf}
-              onClick={() => setExpanded(!expanded)}
-            >
-              Call me!{" "}
-              {expanded ? (
-                <ArrowDown className="h-4 w-4" />
-              ) : (
-                <ArrowRight className="h-4 w-4" />
               )}
-            </Button>
+            </>
           )}
         </motion.div>
         {expanded && (
