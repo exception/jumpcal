@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, PhoneCall, PhoneMissedIcon } from "lucide-react";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,6 +30,7 @@ interface Props {
 }
 
 const CallCard = ({ target, name }: Props) => {
+  const router = useRouter();
   const [callId, setCallId] = useState("");
   const [canceled, setCanceled] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,7 +49,7 @@ const CallCard = ({ target, name }: Props) => {
     },
     {
       enabled: !!callId && !canceled,
-      refetchInterval: 2_000, // 2 seconds
+      refetchInterval: 5_000, // 5 seconds
       refetchIntervalInBackground: true,
     },
   );
@@ -64,9 +66,15 @@ const CallCard = ({ target, name }: Props) => {
   };
 
   useEffect(() => {
+    // ignore any subsequent updates, we no longer care.
+    if (canceled) return;
+
     if (call?.status === "MISSED" || call?.status === "REJECTED") {
       setCanceled(true);
     } else if (call?.status === "ANSWERED") {
+      if (call?.host?.link) {
+        router.push(call.host.link);
+      }
     }
   }, [call]);
 
@@ -150,6 +158,13 @@ const CallCard = ({ target, name }: Props) => {
       </div>
     );
   }
+
+  return (
+    <div className="flex flex-row items-center gap-x-4 pt-2 px-2">
+      <Loader2 className="h-10 w-10 text-neutral-400 animate-spin" />
+      <p className="text-lg text-neutral-900">Redirecting you...</p>
+    </div>
+  );
 };
 
 export default CallCard;

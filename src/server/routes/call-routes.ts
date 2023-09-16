@@ -91,6 +91,12 @@ export const callRoutes = createTRPCRouter({
         where: {
           id: input.callId,
         },
+        select: {
+            createdAt: true,
+            status: true,
+            link: true,
+            hostedOn: true
+        }
       });
 
       if (!call) {
@@ -103,6 +109,6 @@ export const callRoutes = createTRPCRouter({
         date.getTime() - call.createdAt.getTime();
       const differenceInSeconds = differenceInMilliseconds / 1000;
 
-      return { status: call.status, ringingFor: differenceInSeconds };
+      return { status: call.status, ringingFor: differenceInSeconds, host: { type: call.hostedOn, link: call.link } };
     }),
 });
