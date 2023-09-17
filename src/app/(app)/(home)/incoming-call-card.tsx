@@ -9,7 +9,6 @@ import {
 import { trpc } from "@/lib/providers/trpc-provider";
 import { type Call } from "@prisma/client";
 import { PhoneCall, PhoneMissed } from "lucide-react";
-import { useState } from "react";
 
 interface Props {
   call: Pick<
@@ -25,7 +24,12 @@ const IncomingCallCard = ({ call }: Props) => {
       await utils.calls.incomingCalls.refetch();
     },
   });
-  const [accepting, setAccepting] = useState(false);
+
+  const acceptCall = trpc.calls.accept.useMutation({
+    onSuccess({ startUrl, call }) {
+      window.open(call.link ?? startUrl, "_blank");
+    },
+  });
 
   return (
     <div
@@ -57,7 +61,7 @@ const IncomingCallCard = ({ call }: Props) => {
           className="w-full"
           loading={rejectCall.isLoading}
           icon={<PhoneMissed className="h-3 w-3" />}
-          disabled={accepting}
+          disabled={acceptCall.isLoading}
           onClick={() =>
             rejectCall.mutate({
               callId: call.id,
@@ -69,12 +73,16 @@ const IncomingCallCard = ({ call }: Props) => {
         <Button
           size="sm"
           className="w-full"
-          loading={accepting}
+          loading={acceptCall.isLoading}
           icon={<PhoneCall className="h-3 w-3" />}
           disabled={rejectCall.isLoading}
-          onClick={() => setAccepting(true)}
+          onClick={() =>
+            acceptCall.mutate({
+              callId: call.id,
+            })
+          }
         >
-          {accepting ? "Connecting" : "Accept"}
+          {acceptCall.isLoading ? "Connecting" : "Accept"}
         </Button>
       </div>
     </div>

@@ -45,7 +45,7 @@ export const userRoutes = createTRPCRouter({
         username: z.string().optional(),
         timezone: z.string().optional(),
         description: z.string().optional(),
-        layout: z.enum(["VERTICAL", "HORIZONTAL"]).optional()
+        layout: z.enum(["VERTICAL", "HORIZONTAL"]).optional(),
       }),
     )
     .mutation(({ ctx: { session, prisma }, input }) => {
@@ -62,7 +62,7 @@ export const userRoutes = createTRPCRouter({
           timezone: input.timezone,
           description: input.description,
           username: input.username,
-          layout: input.layout
+          layout: input.layout,
         },
       });
     }),
@@ -111,31 +111,6 @@ export const userRoutes = createTRPCRouter({
       });
 
       return !!integration;
-    }),
-  addIntegration: protectedProcedure
-    .input(
-      z.object({
-        type: z.enum(["ZOOM"]),
-        code: z.string().min(1),
-      }),
-    )
-    .mutation(async ({ ctx: { session, prisma }, input }) => {
-      if (input.type === "ZOOM") {
-        // const { code } = input;
-
-        return prisma.integration.create({
-          data: {
-            user: {
-              connect: {
-                id: session.user.id,
-              },
-            },
-            type: "ZOOM",
-            accessToken: "test",
-            refreshToken: "test",
-          },
-        });
-      }
     }),
   removeIntegration: protectedProcedure
     .input(

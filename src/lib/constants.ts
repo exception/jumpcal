@@ -247,16 +247,30 @@ export const countryNameRecord = {
 export type CountryCode = keyof typeof countryNameRecord;
 
 export const getCountryFlagEmoji = (countryCode: CountryCode) => {
-    const codePoints = countryCode
-      .toUpperCase()
-      .split("")
-      .map((char) => 127397 + char.charCodeAt(0))
-    return String.fromCodePoint(...codePoints)
-  }
+  const codePoints = countryCode
+    .toUpperCase()
+    .split("")
+    .map((char) => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+};
 
-export const DAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"];
+export const DAYS = [
+  "MONDAY",
+  "TUESDAY",
+  "WEDNESDAY",
+  "THURSDAY",
+  "FRIDAY",
+  "SATURDAY",
+  "SUNDAY",
+];
 
-export const API_DOMAIN = process.env.NEXT_PUBLIC_VERCEL_ENV === "production" ? "https://jumpcal.com/" : process.env.NGROK_URL;
+const VERCEL_URL = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "";
+const NGROK_URL = process.env.NGROK_URL ?? "";
+
+export const APP_URL = VERCEL_URL || "http://localhost:3000";
+export const APP_URL_WITH_NGROK = NGROK_URL || APP_URL;
 
 export const IS_ON_VERCEL = !!process.env.VERCEL_URL;
 

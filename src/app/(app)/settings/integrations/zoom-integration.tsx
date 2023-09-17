@@ -2,41 +2,17 @@
 
 import { env } from "@/env.mjs";
 import IntegrationCard from "./integration-card";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { trpc } from "@/lib/providers/trpc-provider";
-import Modal from "@/components/ui/modal";
-import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { IS_ON_VERCEL } from "@/lib/constants";
+import { APP_URL } from "@/lib/constants";
 
 const ZoomIntegration = () => {
-  const searchParams = useSearchParams();
-  const zoom = searchParams?.get("zoom");
-  const code = searchParams?.get("code");
   const { toast } = useToast();
   const router = useRouter();
 
   const { data, isLoading, refetch } = trpc.users.hasIntegration.useQuery({
     type: "ZOOM",
-  });
-
-  const enableIntegration = trpc.users.addIntegration.useMutation({
-    async onSuccess() {
-      await refetch();
-      setIntegrating(false);
-      toast({
-        title: "Zoom enabled.",
-        description: "You have successfully enabled the Zoom integration!",
-      });
-    },
-    onError() {
-      setIntegrating(false);
-      toast({
-        variant: "destructive",
-        title: "Something went wrong.",
-      });
-    },
   });
 
   const removeIntegration = trpc.users.removeIntegration.useMutation({
@@ -49,39 +25,16 @@ const ZoomIntegration = () => {
     },
   });
 
-  const [integrating, setIntegrating] = useState(false);
-
-  useEffect(() => {
-    if (zoom && code) {
-      setIntegrating(true);
-      enableIntegration.mutate({ type: "ZOOM", code });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const openZoomIntegration = () => {
-    const redirectUri = IS_ON_VERCEL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/settings/integrations?zoom=true`
-      : "http://localhost:3000/settings/integrations?zoom=true";
-
-    const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${
-      env.NEXT_PUBLIC_ZOOM_CLIENT_ID
-    }&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    const redirectUri = encodeURI(`${APP_URL}/api/integration/zoom/connect`);
+    console.log("redirecting to", redirectUri);
+    const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${env.NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${redirectUri}`;
 
     router.push(url);
   };
 
   return (
     <>
-      <Modal open={integrating} setOpen={() => void 0}>
-        <h2 className="text-lg font-medium">Finishing Zoom Integration</h2>
-        <p className="text-sm text-neutral-400">
-          We are validating Zoom&apos;s response, your work here is done!
-        </p>
-        <div className="w-full py-3 rounded-md bg-neutral-950 text-neutral-100 justify-center flex">
-          <Loader2 className="h-4 w-4 animate-spin" />
-        </div>
-      </Modal>
       <IntegrationCard
         loading={isLoading}
         name="Zoom"
