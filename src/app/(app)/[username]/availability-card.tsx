@@ -45,7 +45,7 @@ const AvailabilityCard = ({
         layout === "VERTICAL" && "max-w-4xl",
       )}
     >
-      <AnimatePresence>
+      <AnimatePresence key={"av-card"}>
         {available ? (
           <div className="flex space-x-2 items-center">
             <span className="relative flex h-3 w-3">
@@ -63,7 +63,10 @@ const AvailabilityCard = ({
             <p className="text-yellow-400 text-sm font-normal">Away</p>
           </div>
         )}
-        <motion.div className="flex items-center justify-between">
+        <motion.div
+          key={"available-chat"}
+          className="flex items-center justify-between"
+        >
           <div className="flex flex-col">
             <p className="text-lg font-medium">
               {available
@@ -114,6 +117,7 @@ const AvailabilityCard = ({
         </motion.div>
         {expanded && (
           <motion.div
+            key="expanded-chat"
             variants={{
               open: { opacity: 1 },
               collapsed: { opacity: 0 },

@@ -3,12 +3,7 @@ import { parse } from "./utils";
 import { getToken } from "next-auth/jwt";
 import { type User } from "@prisma/client";
 
-const RESTRICTED_KEYS = new Set([
-  "",
-  "call-log",
-  "getting-started",
-  "settings",
-]);
+const RESTRICTED_KEYS = new Set(["call-log", "getting-started", "settings"]);
 
 const AppMiddleware = async (req: NextRequest) => {
   const { path, key } = parse(req);
@@ -20,13 +15,19 @@ const AppMiddleware = async (req: NextRequest) => {
     user?: User;
   };
 
-  if (!session?.email && RESTRICTED_KEYS.has(key)) {
-    return NextResponse.redirect(
-      new URL(
-        `/signin${path !== "/" ? `?next=${encodeURIComponent(path)}` : ""}`,
-        req.url,
-      ),
-    );
+  if (!session?.email) {
+    if (RESTRICTED_KEYS.has(key)) {
+      return NextResponse.redirect(
+        new URL(
+          `/signin${path !== "/" ? `?next=${encodeURIComponent(path)}` : ""}`,
+          req.url,
+        ),
+      );
+    } else if (key === "") {
+      return NextResponse.rewrite(new URL(`/landing${path}`, req.url));
+    }
+
+    return NextResponse.next();
   } else if (session?.email) {
     if (!session.user?.username && path !== "/getting-started") {
       return NextResponse.redirect(new URL("/getting-started", req.url));

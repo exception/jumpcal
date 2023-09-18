@@ -27,7 +27,6 @@ const ZoomIntegration = () => {
 
   const openZoomIntegration = () => {
     const redirectUri = encodeURI(`${APP_URL}/api/integration/zoom/connect`);
-    console.log("redirecting to", redirectUri);
     const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${env.NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${redirectUri}`;
 
     router.push(url);

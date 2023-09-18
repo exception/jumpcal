@@ -1,15 +1,14 @@
 import { type NextRequest } from "next/server";
 
-const HOME_HOSTNAMES = new Set(["localhost"]);
+const LANDING_DOMAINS = new Set(["home.localhost:3000", "jumpcal.com"]);
 
-export const isHomeHostname = (domain: string) => {
-  return HOME_HOSTNAMES.has(domain) || domain.endsWith(".vercel.app");
+export const isLanding = (domain: string) => {
+  return LANDING_DOMAINS.has(domain) || domain.endsWith(".vercel.app");
 };
 
 export const parse = (req: NextRequest) => {
   let domain = req.headers.get("host")!;
-  domain = domain.replace("www.", ""); // remove www. from domain
-  //if (isHomeHostname(domain)) domain = "dub.sh"; // if domain is a home hostname, set it to dub.sh
+  domain = domain.replace("www.", "");
 
   const path = req.nextUrl.pathname;
 

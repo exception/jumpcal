@@ -26,8 +26,8 @@ export const authOptions: NextAuthOptions = {
     GitHubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-      allowDangerousEmailAccountLinking: true
-    })
+      allowDangerousEmailAccountLinking: true,
+    }),
   ],
   adapter: PrismaAdapter(prisma),
   session: {

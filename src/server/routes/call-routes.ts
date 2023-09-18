@@ -4,7 +4,7 @@ import { env } from "@/env.mjs";
 import { qstash } from "@/lib/upstash";
 import { APP_URL_WITH_NGROK, DEFAULT_RING_DURATION } from "@/lib/constants";
 import { DateTime } from "luxon";
-import { meetingBody, zoomAuth } from "@/lib/zoom";
+import { meetingBody, zoomAuth } from "@/lib/integrations/zoom";
 
 const zoomMeetingResponse = z.object({
   start_url: z.string().url(),
