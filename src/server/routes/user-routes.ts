@@ -1,7 +1,12 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import cloudinary from "cloudinary";
-import { type DayAvailability, DayAvailabilty } from "@/lib/availability";
+import {
+  type DayAvailability,
+  DayAvailabilty,
+  isUserAvailable,
+} from "@/lib/availability";
+import { isUserBusy } from "@/lib/integrations/google-calendar";
 
 const defaultSlotRange = {
   start: { hour: 9, minute: 0 },
@@ -97,7 +102,7 @@ export const userRoutes = createTRPCRouter({
   hasIntegration: protectedProcedure
     .input(
       z.object({
-        type: z.enum(["ZOOM"]),
+        type: z.enum(["ZOOM", "CALENDAR_GCAL"]),
       }),
     )
     .query(async ({ ctx: { session, prisma }, input }) => {
@@ -115,7 +120,7 @@ export const userRoutes = createTRPCRouter({
   removeIntegration: protectedProcedure
     .input(
       z.object({
-        type: z.enum(["ZOOM"]),
+        type: z.enum(["ZOOM", "CALENDAR_GCAL"]),
       }),
     )
     .mutation(({ ctx: { session, prisma }, input }) => {
@@ -173,6 +178,64 @@ export const userRoutes = createTRPCRouter({
           image: secure_url,
         },
       });
+    }),
+  isUserAvailable: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx: { prisma }, input }) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: input.userId,
+        },
+        include: {
+          integrations: {
+            where: {
+              type: "CALENDAR_GCAL",
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new Error("Unknown user.");
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      if (user.integrations?.length === 0) {
+        if (
+          !isUserAvailable(
+            user.availability as DayAvailability[],
+            user.timezone ?? "",
+          )
+        ) {
+          return { status: "offline" };
+        }
+
+        return { status: "online" };
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-asserted-optional-chain
+      const googleIntegartion = user?.integrations[0]!;
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const isBusy = await isUserBusy(googleIntegartion);
+      if (isBusy) {
+        return { status: "busy" };
+      }
+
+      if (
+        !isUserAvailable(
+          user.availability as DayAvailability[],
+          user.timezone ?? "",
+        )
+      ) {
+        return { status: "offline" };
+      }
+
+      return { status: "online" };
     }),
   availability: protectedProcedure.query(
     async ({ ctx: { session, prisma } }) => {

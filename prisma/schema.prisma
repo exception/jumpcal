@@ -116,6 +116,7 @@ model Call {
 
 enum IntegrationType {
   ZOOM
+  CALENDAR_GCAL
 }
 
 model Integration {

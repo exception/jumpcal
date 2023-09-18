@@ -5,6 +5,7 @@ import ZoomIntegration from "./zoom-integration";
 import { useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
+import GoogleCalendarIntegration from "./google-calendar-integration";
 
 const IntegrationSettings = () => {
   const searchParams = useSearchParams();
@@ -25,9 +26,10 @@ const IntegrationSettings = () => {
   return (
     <SettingsContainer
       title="Integrations"
-      description="Allow Jumpcal to schedule calls on your behalf."
+      description="How Jumpcal interacts with your already existing tools."
     >
       <ZoomIntegration />
+      <GoogleCalendarIntegration />
     </SettingsContainer>
   );
 };

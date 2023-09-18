@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
 
 interface Props {
-  type?: "NOTIFICATION" | "CALL";
+  type?: "NOTIFICATION" | "CALL" | "CALENDAR";
   enabled: boolean;
   name: string;
   description: string;
@@ -17,6 +17,18 @@ interface Props {
   handleEnable: () => Promise<void> | void;
   handleDisable: () => Promise<void> | void;
 }
+
+const integrationCopy = ({ type, name }: Pick<Props, "type" | "name">) => {
+  switch (type) {
+    case "CALL":
+      return `You are about to enable the ${name} integration. You will be
+      redirected to ${name}'s website to finish the setup.`;
+    case "NOTIFICATION":
+      return `You are about to enable notifications via ${name}.`;
+    case "CALENDAR":
+      return `You are about to connect your ${name} Calendar to Jumpcal. We will only use this connection to check your availability.`;
+  }
+};
 
 const IntegrationCard = ({
   enabled,
@@ -63,18 +75,9 @@ const IntegrationCard = ({
       </div>
       <Modal open={modalOpen} setOpen={setModalOpen}>
         <div className="flex flex-col space-y-2 w-full">
-          <h2 className="text-lg font-medium">
-            Enable {name} {type === "CALL" ? "Integration" : "Notification"}
-          </h2>
+          <h2 className="text-lg font-medium">Enable {name}</h2>
           <p className="text-sm text-neutral-400">
-            {type === "CALL" ? (
-              <>
-                You are about to enable the {name} integration. You will be
-                redirected to {name}&apos;s website to finish the setup.
-              </>
-            ) : (
-              <>You are about to enable notifications via {name}.</>
-            )}
+            {integrationCopy({ type, name })}
           </p>
           <Separator className="!my-3" />
           <div className="flex flex-row space-x-2">
