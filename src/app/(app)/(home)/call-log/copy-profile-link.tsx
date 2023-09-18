@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { APP_URL } from "@/lib/constants";
 import { Check, Clipboard } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -23,7 +24,7 @@ const CopyProfileLink = () => {
       onClick={async () => {
         setCopied(true);
         await navigator.clipboard.writeText(
-          `https://jumpcal.com/${session?.user.username}`,
+          `${APP_URL}/${session?.user.username}`,
         );
         toast({
           title: "Copied link to clipboard!",

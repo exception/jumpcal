@@ -66,7 +66,10 @@ const AccountSettingsForm = () => {
 
   return (
     <Form {...form}>
-      <form className="space-y-4" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        className="space-y-2 flex flex-col"
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <FormField
           control={form.control}
           name="fullName"
@@ -94,6 +97,8 @@ const AccountSettingsForm = () => {
         />
         <Button
           disabled={!form.formState.isDirty || !form.formState.isValid}
+          size="sm"
+          className="self-end"
           icon={<SaveIcon className="w-4 h-4" />}
           loading={updateUser.isLoading}
         >

@@ -61,7 +61,10 @@ const AvailabilityContent = () => {
     <div>
       <Form {...form}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="flex flex-col space-y-2"
+        >
           <FormField
             control={form.control}
             name="timezone"
@@ -91,7 +94,8 @@ const AvailabilityContent = () => {
           />
           <Button
             disabled={!form.formState.isDirty || !form.formState.isValid}
-            className="mt-2"
+            size="sm"
+            className="self-end"
             icon={<SaveIcon className="w-4 h-4" />}
             loading={saveTimezone.isLoading}
           >
