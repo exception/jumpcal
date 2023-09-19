@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import IncomingCallsProvider from "@/lib/providers/incoming-calls-provider";
 import { TrpcProvider } from "@/lib/providers/trpc-provider";
 import { SessionProvider } from "next-auth/react";
+import { Analytics } from "@vercel/analytics/react";
 
 const Providers = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
@@ -15,6 +16,7 @@ const Providers = ({ children }: React.PropsWithChildren<unknown>) => {
         </IncomingCallsProvider>
       </TrpcProvider>
       <Toaster />
+      <Analytics />
     </SessionProvider>
   );
 };
