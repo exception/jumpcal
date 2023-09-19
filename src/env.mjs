@@ -29,6 +29,8 @@ export const env = createEnv({
     QSTASH_NEXT_SIGNING_KEY: z.string().min(1),
     QSTASH_CLIENT_TOKEN: z.string().min(1),
 
+    RESEND_API_KEY: z.string().min(1),
+
     NGROK_URL: z.string().optional(),
   },
 
@@ -55,5 +57,6 @@ export const env = createEnv({
     QSTASH_NEXT_SIGNING_KEY: process.env.QSTASH_NEXT_SIGNING_KEY,
     QSTASH_CLIENT_TOKEN: process.env.QSTASH_CLIENT_TOKEN,
     NGROK_URL: process.env.NGROK_URL,
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
 });

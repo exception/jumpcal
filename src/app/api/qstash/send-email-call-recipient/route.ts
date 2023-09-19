@@ -1,9 +1,11 @@
 import { prisma } from "@/db";
+import { sendEmail } from "@/lib/resend";
+import CallSurvey from "@/lib/resend/emails/call-survey";
 import { receiver } from "@/lib/upstash";
 import { z } from "zod";
 
 const bodySchema = z.object({
-    callId: z.string()
+  callId: z.string(),
 });
 
 export async function POST(req: Request) {
@@ -30,18 +32,30 @@ export async function POST(req: Request) {
       },
       include: {
         target: {
-            select: {
-                name: true
-            }
-        }
-      }
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     if (!call || call.status !== "ANSWERED") {
       return new Response(null, { status: 200 });
     }
 
-    console.log(`Send email to ${call.callerEmail} about their call with ${call.target.name}`);
+    console.log(
+      `Sent email to ${call.callerEmail} about their call with ${call.target.name}`,
+    );
+    await sendEmail({
+      to: call.callerEmail,
+      subject: `How was your call with ${call.target.name}`,
+      content: CallSurvey({
+        callId,
+        callerEmail: call.callerEmail,
+        callerName: call.callerName,
+        targetName: call.target.name ?? "Unknown",
+      }),
+    });
   } finally {
     return new Response(null, { status: 200 });
   }

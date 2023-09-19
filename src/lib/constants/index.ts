@@ -267,8 +267,15 @@ export const DAYS = [
 export const APP_URL =
   process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
     ? "https://app.jumpcal.io"
-    : process.env.NEXT_PUBLIC_VERCEL_URL === "preview"
-    ? `https://${(process.env.VERCEL_URL)}`
+    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
+    ? `https://app.${process.env.VERCEL_URL}`
+    : "http://localhost:3000";
+
+export const HOMEPAGE_URL =
+  process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
+    ? "https://jumpcal.io"
+    : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
+    ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
 
 const NGROK_URL = process.env.NGROK_URL ?? "";
