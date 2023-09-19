@@ -96,7 +96,7 @@ const UploadAvatarRow = () => {
             <Image
               className="h-full w-full object-cover"
               src={imageContent ?? session?.user.image ?? ""}
-              alt=""
+              alt="Your Avatar"
               width={128}
               height={128}
               priority

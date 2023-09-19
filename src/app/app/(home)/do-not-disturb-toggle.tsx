@@ -29,10 +29,11 @@ const DoNotDisturbToggle = () => {
             Do not Disturb
           </p>
         </TooltipTrigger>
-        <TooltipContent className="w-40 text-center">
-          <p>
-            While on Do not Disturb, you will still be able to receive calls but
-            you will get no notifications.
+        <TooltipContent side="left" className="w-52 text-center">
+          <p className="text-neutral-500">
+            While on <span className="font-medium">Do not Disturb</span>, you
+            will still be able to receive calls but you will get no
+            notifications.
           </p>
         </TooltipContent>
       </Tooltip>

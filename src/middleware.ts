@@ -11,8 +11,6 @@ export const config = {
 export default function middleware(req: NextRequest) {
   const { domain, path } = parse(req);
 
-  console.log("Parsed domain", domain)
-
   if (isLanding(domain)) {
     return NextResponse.rewrite(new URL(`/jumpcal.io${path}`, req.url));
   }

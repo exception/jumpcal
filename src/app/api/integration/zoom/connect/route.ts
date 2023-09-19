@@ -6,6 +6,8 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 
+export const dynamic = "force-dynamic"
+
 const queryParams = z.object({
   code: z.string(),
 });

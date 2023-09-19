@@ -79,7 +79,7 @@ const SmsNotification = () => {
       toast({
         title: "SMS Disabled",
         description:
-          "You will no longer receive notifications about incoming calls via SMS",
+          "You will no longer receive notifications about incoming calls via SMS.",
       });
     },
   });
