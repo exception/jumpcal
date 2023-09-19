@@ -45,8 +45,9 @@ export const GET = async (req: Request) => {
 
     return Response.redirect(`${APP_URL}/settings/integrations`);
   } catch (err) {
+    console.error("Failed to integrate with Google", err);
     return Response.redirect(
-      `${APP_URL}/settings/integrations?error=Failed to integrate with zoom.`,
+      `${APP_URL}/settings/integrations?error=Failed to integrate with Google.`,
     );
   }
 };

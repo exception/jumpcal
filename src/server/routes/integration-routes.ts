@@ -8,6 +8,9 @@ const scopes = ["https://www.googleapis.com/auth/calendar.readonly"];
 export const integrationRoutes = createTRPCRouter({
   generateGoogleOAuthUrl: protectedProcedure.mutation(() => {
     const redirectUri = `${APP_URL}/api/integration/google/connect`;
+
+    console.log("redirect uri", redirectUri);
+
     const oauth2Client = new google.auth.OAuth2({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,

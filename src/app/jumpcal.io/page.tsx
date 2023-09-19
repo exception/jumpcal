@@ -1,5 +1,5 @@
 import MaxWidthContainer from "@/components/app/max-width-container";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { APP_URL } from "@/lib/constants";
 import { ArrowRight } from "lucide-react";
