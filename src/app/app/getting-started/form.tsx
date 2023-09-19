@@ -98,7 +98,7 @@ const OnboardingForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
-              <Input {...field} placeholder="username" addOn="jumpcal.com/" />
+              <Input {...field} placeholder="username" addOn="jumpcal.io/" />
               <FormMessage />
             </FormItem>
           )}

@@ -61,7 +61,7 @@ const SignupForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <Input {...field} placeholder="username" addOn="jumpcal.com/" />
+                <Input {...field} placeholder="username" addOn="jumpcal.io/" />
                 <FormMessage />
               </FormItem>
             )}

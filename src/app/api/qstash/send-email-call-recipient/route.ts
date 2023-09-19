@@ -3,7 +3,7 @@ import { receiver } from "@/lib/upstash";
 import { z } from "zod";
 
 const bodySchema = z.object({
-  callId: z.string()
+    callId: z.string()
 });
 
 export async function POST(req: Request) {
@@ -28,20 +28,20 @@ export async function POST(req: Request) {
       where: {
         id: callId,
       },
+      include: {
+        target: {
+            select: {
+                name: true
+            }
+        }
+      }
     });
 
-    if (!call || call.status !== "PENDING") {
+    if (!call || call.status !== "ANSWERED") {
       return new Response(null, { status: 200 });
     }
 
-    await prisma.call.update({
-      where: {
-        id: callId,
-      },
-      data: {
-        status: "MISSED",
-      },
-    });
+    console.log(`Send email to ${call.callerEmail} about their call with ${call.target.name}`);
   } finally {
     return new Response(null, { status: 200 });
   }

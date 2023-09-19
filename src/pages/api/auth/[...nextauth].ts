@@ -5,6 +5,8 @@ import { env } from "@/env.mjs";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db";
 import { type User } from "@prisma/client";
+import { defaultCookies } from "@/lib/constants/cookies";
+import { IS_ON_VERCEL } from "@/lib/constants";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -33,6 +35,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     error: "/signin",
   },
+  cookies: defaultCookies(IS_ON_VERCEL),
   callbacks: {
     signIn: async ({ user, profile }) => {
       if (!user.email) {

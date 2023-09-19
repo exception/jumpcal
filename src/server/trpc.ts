@@ -20,13 +20,15 @@ const getServerAuthSession = (ctx: {
 
 interface CreateContextOptions {
   session: Session | null;
+  req: GetServerSidePropsContext["req"];
 }
 
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
-    twilio: client
+    twilio: client,
+    req: opts.req
   };
 };
 
@@ -38,6 +40,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
   return createInnerTRPCContext({
     session,
+    req,
   });
 };
 

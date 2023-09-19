@@ -12,7 +12,7 @@ export default function middleware(req: NextRequest) {
   const { domain, path } = parse(req);
 
   if (isLanding(domain)) {
-    return NextResponse.rewrite(new URL(`/landing${path}`, req.url));
+    return NextResponse.rewrite(new URL(`/jumpcal.io${path}`, req.url));
   }
 
   return AppMiddleware(req);

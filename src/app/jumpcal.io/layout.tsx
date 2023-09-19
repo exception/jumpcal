@@ -1,6 +1,7 @@
 import MaxWidthContainer from "@/components/app/max-width-container";
 import { buttonVariants } from "@/components/ui/button";
 import JumpcalLogoFull from "@/components/ui/icons/jumpcal-logo-full";
+import { APP_URL } from "@/lib/constants";
 import Link from "next/link";
 
 const LandingLayout = ({ children }: React.PropsWithChildren<unknown>) => {
@@ -15,13 +16,13 @@ const LandingLayout = ({ children }: React.PropsWithChildren<unknown>) => {
             <div className="flex space-x-2">
               <Link
                 className={buttonVariants({ variant: "link" })}
-                href={`/signin`}
+                href={`${APP_URL}/signin`}
               >
                 Sign In
               </Link>
               <Link
                 className={buttonVariants({ variant: "default" })}
-                href={`/signup`}
+                href={`${APP_URL}/signup`}
               >
                 Sign Up
               </Link>

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { env } from "@/env.mjs";
 import { qstash } from "@/lib/upstash";
-import { APP_URL_WITH_NGROK, DEFAULT_RING_DURATION } from "@/lib/constants";
+import { APP_URL_WITH_NGROK, DEFAULT_RING_DURATION, IS_ON_VERCEL } from "@/lib/constants";
 import { DateTime } from "luxon";
 import { meetingBody, zoomAuth } from "@/lib/integrations/zoom";
 
@@ -10,6 +10,10 @@ const zoomMeetingResponse = z.object({
   start_url: z.string().url(),
   join_url: z.string().url(),
 });
+
+const DEFAULT_GEO_DATA = {
+  country: "US"
+}
 
 export const callRoutes = createTRPCRouter({
   requestCall: publicProcedure
@@ -24,7 +28,11 @@ export const callRoutes = createTRPCRouter({
         target: z.string().min(1),
       }),
     )
-    .mutation(async ({ ctx: { prisma, twilio }, input }) => {
+    .mutation(async ({ ctx: { prisma, twilio, req }, input }) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { country } = IS_ON_VERCEL && req.geo ? req.geo : DEFAULT_GEO_DATA;
+
       const call = await prisma.call.create({
         data: {
           target: {
@@ -35,7 +43,7 @@ export const callRoutes = createTRPCRouter({
           callerEmail: input.caller.email,
           callerName: input.caller.name,
           callerReason: input.caller.reason,
-          countryCode: input.caller.country,
+          countryCode: country,
           hostedOn: "ZOOM", //! Default to Zoom as it's the only thing we support for now
           status: "PENDING",
         },
@@ -188,6 +196,20 @@ export const callRoutes = createTRPCRouter({
           status: "ANSWERED"
         },
       });
+
+      try {
+        // we don't care about the promise here
+        void qstash.publishJSON({
+          delay: 30 * 60, // 30 minutes
+          method: "POST",
+          body: {
+            callId: call.id,
+          },
+          url: `${APP_URL_WITH_NGROK}/api/qstash/send-email-call-recipient`,
+        });
+      } catch (err) {
+        console.error("QStash reminder failed to publish", err);
+      }
 
       return { startUrl: zoomMeeting.start_url, call: updated };
     }),

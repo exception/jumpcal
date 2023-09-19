@@ -25,7 +25,7 @@ const LandingPage = () => {
               maxLength={16}
               minLength={2}
               placeholder="username"
-              addOn="jumpcal.com/"
+              addOn="jumpcal.io/"
             />
             <Button variant={"pink"}>
               Claim Username <ArrowRight className="h-4 w-4" />

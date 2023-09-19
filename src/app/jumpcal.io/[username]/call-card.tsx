@@ -103,7 +103,7 @@ const CallCard = ({ target, name }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
-                <Input {...field} placeholder="email@jumpcal.com" />
+                <Input {...field} placeholder="email@jumpcal.io" />
                 <FormMessage />
               </FormItem>
             )}
