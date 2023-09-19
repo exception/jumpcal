@@ -40,6 +40,7 @@ export const GET = async (req: Request) => {
     );
 
     if (result.status !== 200) {
+      console.error("Zoom integration failed", result.body);
       return Response.redirect(
         `${APP_URL}/settings/integrations?error=Failed to integrate with zoom.`,
       );
@@ -71,6 +72,7 @@ export const GET = async (req: Request) => {
 
     return Response.redirect(`${APP_URL}/settings/integrations`);
   } catch (err) {
+    console.error("Failed zoom integration", err);
     return Response.redirect(
       `${APP_URL}/settings/integrations?error=Failed to integrate with zoom.`,
     );
