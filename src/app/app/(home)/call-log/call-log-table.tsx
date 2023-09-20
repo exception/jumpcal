@@ -77,14 +77,16 @@ const CallLogTable = ({
                   </p>
                 </div>
               </div>
-              <Link
-                className={buttonVariants({ size: "sm" })}
-                href={`mailto:${call.callerEmail}?subject=Follow-up to our call&body=Hey ${call.callerName},\n`}
-                target="_blank"
-              >
-                <Mail className="h-4 w-4" />
-                Follow Up
-              </Link>
+              {call.status === "ANSWERED" && (
+                <Link
+                  className={buttonVariants({ size: "sm" })}
+                  href={`mailto:${call.callerEmail}?subject=Follow-up to our call&body=Hey ${call.callerName},\n`}
+                  target="_blank"
+                >
+                  <Mail className="h-4 w-4" />
+                  Follow Up
+                </Link>
+              )}
             </div>
           );
         })}
