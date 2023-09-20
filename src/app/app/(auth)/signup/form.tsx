@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GithubIcon } from "lucide-react";
+// import { GithubIcon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -23,7 +23,7 @@ const SignupForm = () => {
   const searchParams = useSearchParams();
   const next = searchParams?.get("next");
   const [clickedGoogle, setClickedGoogle] = useState(false);
-  const [clickedGithub, setClickedGithub] = useState(false);
+  // const [clickedGithub, setClickedGithub] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -74,7 +74,7 @@ const SignupForm = () => {
       <Separator />
       <Button
         loading={clickedGoogle}
-        disabled={!form.formState.isValid || clickedGithub}
+        disabled={!form.formState.isValid}
         size="xl"
         onClick={() => {
           setClickedGoogle(true);
@@ -86,7 +86,7 @@ const SignupForm = () => {
       >
         Continue with Google
       </Button>
-      <Button
+      {/* <Button
         loading={clickedGithub}
         disabled={!form.formState.isValid || clickedGoogle}
         size="xl"
@@ -99,7 +99,7 @@ const SignupForm = () => {
         icon={<GithubIcon className="h-4 w-4" />}
       >
         Continue with GitHub
-      </Button>
+      </Button> */}
       <p className="text-sm text-neutral-500">
         Already have an account?{" "}
         <Link href="/signin">

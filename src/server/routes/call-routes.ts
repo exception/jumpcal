@@ -54,7 +54,8 @@ export const callRoutes = createTRPCRouter({
       });
 
       try {
-        await qstash.publishJSON({
+        // skip await to return faster
+        void qstash.publishJSON({
           delay: DEFAULT_RING_DURATION,
           method: "POST",
           body: {
@@ -67,16 +68,22 @@ export const callRoutes = createTRPCRouter({
           where: {
             id: input.target,
           },
-          select: {
-            phoneNumber: true,
-            dnd: true,
-          },
+          include: {
+            phoneNotification: {
+              take: 1,
+            }
+          }
         });
 
-        if (target?.phoneNumber && !target.dnd) {
-          await twilio.messages.create({
-            from: env.TWILIO_PHONE_NUMBER,
-            to: target.phoneNumber,
+        const targetNotification = target?.phoneNotification[0];
+
+        // skip await to return faster
+        if (targetNotification?.phoneNumber && !target?.dnd) {
+          const isWhatsapp = targetNotification.type === "WHATSAPP";
+          void twilio.messages.create({
+            from: `${isWhatsapp ? "whatsapp:" : ""}${env.TWILIO_PHONE_NUMBER}`,
+            to: `${isWhatsapp ? "whatsapp:" : ""}${targetNotification.phoneNumber}`,
+
             body: `You have a new Jumpcal meeting request from ${input.caller.name} who wants to talk about "${input.caller.reason}".`,
           });
         }
@@ -110,7 +117,7 @@ export const callRoutes = createTRPCRouter({
       }),
     )
     .query(async ({ ctx: { prisma }, input }) => {
-      const call = await prisma.call.findUnique({
+      const call = await prisma.call.findUniqueOrThrow({
         where: {
           id: input.callId,
         },
@@ -122,10 +129,6 @@ export const callRoutes = createTRPCRouter({
         },
       });
 
-      if (!call) {
-        return null;
-      }
-
       const date = new Date();
 
       const differenceInMilliseconds =
@@ -133,7 +136,7 @@ export const callRoutes = createTRPCRouter({
       const differenceInSeconds = differenceInMilliseconds / 1000;
 
       return {
-        status: call.status,
+        status: differenceInSeconds > DEFAULT_RING_DURATION ? "MISSED" : call.status,
         ringingFor: differenceInSeconds,
         host: { type: call.hostedOn, link: call.link },
       };
@@ -153,15 +156,11 @@ export const callRoutes = createTRPCRouter({
   accept: protectedProcedure
     .input(z.object({ callId: z.string() }))
     .mutation(async ({ ctx: { session, prisma }, input }) => {
-      const call = await prisma.call.findUnique({
+      const call = await prisma.call.findUniqueOrThrow({
         where: {
           id: input.callId,
         },
       });
-
-      if (!call) {
-        throw new Error("Unknown call.");
-      }
 
       const integration = await prisma.integration.findUnique({
         where: {

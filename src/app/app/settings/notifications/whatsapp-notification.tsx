@@ -24,7 +24,7 @@ const formSchema = z.object({
   code: z.string().max(6).optional(),
 });
 
-const SmsNotification = () => {
+const WhatsappNotification = () => {
   const { status } = useSession();
   const [enabling, setEnabling] = useState(false);
   const [smsSent, setSmsSent] = useState(false);
@@ -53,7 +53,7 @@ const SmsNotification = () => {
 
   const { data, isLoading, refetch } = trpc.notifications.has.useQuery(
     {
-      type: "sms",
+      type: "whatsapp",
     },
     {
       enabled: status === "authenticated",
@@ -66,9 +66,9 @@ const SmsNotification = () => {
         await refetch();
         setEnabling(false);
         toast({
-          title: "SMS Enabled",
+          title: "WhatsApp Enabled",
           description:
-            "Jumpcal will now send you SMS notifications about incoming call requests.",
+            "Jumpcal will now send you WhatsApp notifications about incoming call requests.",
         });
       } else {
         toast({
@@ -86,9 +86,9 @@ const SmsNotification = () => {
     async onSuccess() {
       await refetch();
       toast({
-        title: "SMS Disabled",
+        title: "Whatsapp Disabled",
         description:
-          "You will no longer receive notifications about incoming calls via SMS.",
+          "You will no longer receive notifications about incoming calls via WhatsApp.",
       });
     },
   });
@@ -104,13 +104,13 @@ const SmsNotification = () => {
     if (!smsSent) {
       sendCode.mutate({
         phone: form.phoneNumber,
-        channel: "sms",
+        channel: "whatsapp",
       });
     } else {
       verifyCode.mutate({
         phone: form.phoneNumber,
         code: form.code!,
-        channel: "sms",
+        channel: "whatsapp",
       });
     }
   };
@@ -167,13 +167,13 @@ const SmsNotification = () => {
       </Modal>
       <IntegrationCard
         loading={status === "loading" || isLoading}
-        name="SMS"
+        name="WhatsApp"
         type="NOTIFICATION"
-        description="Jumpcal will notify you about new calls via SMS."
+        description="Jumpcal will notify you about new calls via WhatsApp."
         enabled={data ?? false}
         handleDisable={() =>
           removeSms.mutate({
-            type: "sms",
+            type: "whatsapp",
           })
         }
         handleEnable={() => {
@@ -184,4 +184,4 @@ const SmsNotification = () => {
   );
 };
 
-export default SmsNotification;
+export default WhatsappNotification;

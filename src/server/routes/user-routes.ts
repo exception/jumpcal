@@ -87,18 +87,6 @@ export const userRoutes = createTRPCRouter({
         },
       });
     }),
-  dndStatus: protectedProcedure.query(async ({ ctx: { session, prisma } }) => {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-      select: {
-        dnd: true,
-      },
-    });
-
-    return user?.dnd;
-  }),
   hasIntegration: protectedProcedure
     .input(
       z.object({

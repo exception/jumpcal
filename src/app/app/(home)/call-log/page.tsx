@@ -6,6 +6,7 @@ import { trpc } from "@/lib/providers/trpc-provider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
 import CallLogTable from "./call-log-table";
+import { isMultiDArrayEmpty } from "@/lib/utils";
 
 const CallLogPage = () => {
   const {
@@ -38,7 +39,7 @@ const CallLogPage = () => {
     return <Skeleton className="h-64 w-full" />;
   }
 
-  if (!data || data.pages.length === 0) {
+  if (!data || isMultiDArrayEmpty(data.pages)) {
     return (
       <div className="bg-white border border-neutral-200 flex items-center justify-center flex-col p-4 text-neutral-500">
         <Image

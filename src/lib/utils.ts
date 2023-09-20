@@ -26,3 +26,7 @@ export const firstName = (fullName: string) => {
 
   return fullName.split(' ')[0];
 }
+
+export const isMultiDArrayEmpty = (array: any[][]) => {
+  return array.length === 0 || array.every(arr => arr.length === 0);
+}

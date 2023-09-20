@@ -8,16 +8,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { trpc } from "@/lib/providers/trpc-provider";
+import { useSession } from "next-auth/react";
 
 const DoNotDisturbToggle = () => {
-  const { data, isLoading, refetch } = trpc.users.dndStatus.useQuery();
+  const { data: session, update, status } = useSession();
   const toggleDnd = trpc.users.toggleDnd.useMutation({
     async onSuccess() {
-      await refetch();
+      await update();
     },
   });
 
-  if (isLoading) {
+  if (status !== "authenticated") {
     return <Skeleton className="w-40 h-6" />;
   }
 
@@ -38,7 +39,7 @@ const DoNotDisturbToggle = () => {
         </TooltipContent>
       </Tooltip>
       <Switch
-        checked={data}
+        checked={session.user.dnd}
         onCheckedChange={(checked) => toggleDnd.mutate({ state: checked })}
       />
     </div>

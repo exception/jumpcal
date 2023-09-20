@@ -13,14 +13,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut, MoonIcon, Settings } from "lucide-react";
-import { trpc } from "@/lib/providers/trpc-provider";
 import { Skeleton } from "../ui/skeleton";
 
 const UserDropdown = () => {
   const { data: session, status } = useSession();
-  const { data, isLoading } = trpc.users.dndStatus.useQuery(undefined, {
-    enabled: status === "authenticated",
-  });
 
   if (status === "unauthenticated") {
     return <></>;
@@ -47,7 +43,7 @@ const UserDropdown = () => {
               <Skeleton className="h-8 w-8" />
             </AvatarFallback>
           </Avatar>
-          {data && !isLoading && (
+          {session?.user.dnd && (
             <div className="absolute -bottom-2 -right-2 rounded-full bg-white border border-neutral-200 p-[2px]">
               <MoonIcon className="h-3 w-3" />
             </div>

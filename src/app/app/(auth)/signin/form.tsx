@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import GoogleIcon from "@/components/ui/icons/google-icon";
 import { useToast } from "@/components/ui/use-toast";
-import { GithubIcon } from "lucide-react";
+// import { GithubIcon } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ const LoginForm = () => {
   const searchParams = useSearchParams();
   const next = searchParams?.get("next");
   const [clickedGoogle, setClickedGoogle] = useState(false);
-  const [clickedGithub, setClickedGithub] = useState(false);
+  // const [clickedGithub, setClickedGithub] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const LoginForm = () => {
     <div className="space-y-4">
       <Button
         loading={clickedGoogle}
-        disabled={clickedGithub}
+        // disabled={clickedGithub}
         size="xl"
         onClick={() => {
           setClickedGoogle(true);
@@ -43,7 +43,7 @@ const LoginForm = () => {
       >
         Continue with Google
       </Button>
-      <Button
+      {/* <Button
         loading={clickedGithub}
         disabled={clickedGoogle}
         size="xl"
@@ -56,7 +56,7 @@ const LoginForm = () => {
         icon={<GithubIcon className="h-4 w-4" />}
       >
         Continue with GitHub
-      </Button>
+      </Button> */}
       <p className="text-sm text-neutral-500">
         Don&apos;t have an account?{" "}
         <Link href="/signup">

@@ -7,12 +7,13 @@ export const notificationRoutes = createTRPCRouter({
     .input(
       z.object({
         phone: z.string().min(1),
+        channel: z.literal("whatsapp").or(z.literal("sms")),
       }),
     )
     .mutation(async ({ ctx: { twilio }, input }) => {
       await twilio.verify.v2
         .services(env.TWILIO_SERVICE)
-        .verifications.create({ to: input.phone, channel: "sms" });
+        .verifications.create({ to: input.phone, channel: input.channel });
       return true;
     }),
   verifyTwilioCode: protectedProcedure
@@ -20,6 +21,7 @@ export const notificationRoutes = createTRPCRouter({
       z.object({
         phone: z.string().min(1),
         code: z.string().min(1).max(6),
+        channel: z.literal("whatsapp").or(z.literal("sms")),
       }),
     )
     .mutation(async ({ ctx: { session, prisma, twilio }, input }) => {
@@ -27,12 +29,15 @@ export const notificationRoutes = createTRPCRouter({
         .services(env.TWILIO_SERVICE)
         .verificationChecks.create({ to: input.phone, code: input.code });
       if (status === "approved") {
-        await prisma.user.update({
-          where: {
-            id: session.user.id,
-          },
+        await prisma.phoneNotification.create({
           data: {
+            user: {
+              connect: {
+                id: session.user.id,
+              },
+            },
             phoneNumber: input.phone,
+            type: input.channel === "whatsapp" ? "WHATSAPP" : "SMS",
           },
         });
 
@@ -41,14 +46,38 @@ export const notificationRoutes = createTRPCRouter({
 
       return { status: "not-verified" };
     }),
-  removeSms: protectedProcedure.mutation(({ ctx: { session, prisma } }) => {
-    return prisma.user.update({
-      where: {
-        id: session.user.id,
-      },
-      data: {
-        phoneNumber: null,
-      },
-    });
-  }),
+  remove: protectedProcedure
+    .input(
+      z.object({
+        type: z.literal("whatsapp").or(z.literal("sms")),
+      }),
+    )
+    .mutation(({ ctx: { session, prisma }, input }) => {
+      return prisma.phoneNotification.delete({
+        where: {
+          userId_type: {
+            userId: session.user.id,
+            type: input.type === "whatsapp" ? "WHATSAPP" : "SMS",
+          },
+        },
+      });
+    }),
+  has: protectedProcedure
+    .input(
+      z.object({
+        type: z.literal("whatsapp").or(z.literal("sms")),
+      }),
+    )
+    .query(async ({ ctx: { session, prisma }, input }) => {
+      const phone = await prisma.phoneNotification.findUnique({
+        where: {
+          userId_type: {
+            type: input.type === "whatsapp" ? "WHATSAPP" : "SMS",
+            userId: session.user.id,
+          },
+        },
+      });
+
+      return !!phone;
+    }),
 });
