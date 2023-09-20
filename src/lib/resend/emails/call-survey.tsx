@@ -12,7 +12,6 @@ import {
   Text,
 } from "@react-email/components";
 import Footer from "../footer";
-import { ArrowRight } from "lucide-react";
 import { firstName } from "@/lib/utils";
 import { APP_URL } from "@/lib/constants";
 

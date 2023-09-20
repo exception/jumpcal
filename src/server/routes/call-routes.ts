@@ -202,19 +202,19 @@ export const callRoutes = createTRPCRouter({
         },
       });
 
-      try {
-        // we don't care about the promise here
-        void qstash.publishJSON({
-          delay: 30 * 60, // 30 minutes
-          method: "POST",
-          body: {
-            callId: call.id,
-          },
-          url: `${APP_URL_WITH_NGROK}/api/qstash/send-email-call-recipient`,
-        });
-      } catch (err) {
-        console.error("QStash reminder failed to publish", err);
-      }
+      // try {
+      //   // we don't care about the promise here
+      //   void qstash.publishJSON({
+      //     delay: 30 * 60, // 30 minutes
+      //     method: "POST",
+      //     body: {
+      //       callId: call.id,
+      //     },
+      //     url: `${APP_URL_WITH_NGROK}/api/qstash/send-email-call-recipient`,
+      //   });
+      // } catch (err) {
+      //   console.error("QStash reminder failed to publish", err);
+      // }
 
       return { startUrl: zoomMeeting.start_url, call: updated };
     }),
