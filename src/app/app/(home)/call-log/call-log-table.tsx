@@ -1,8 +1,8 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { Badge, badgeVariants } from "@/components/ui/badge";
+import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { type Call } from "@prisma/client";
-import { VariantProps } from "class-variance-authority";
+import { type VariantProps } from "class-variance-authority";
 import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
 import { DateTime } from "luxon";
 import Link from "next/link";
@@ -35,7 +35,6 @@ const badgeVariant = (
 
 const CallLogTable = ({
   page,
-  currentPage,
   hasNext,
   hasPrevious,
   nextPage,
@@ -48,7 +47,10 @@ const CallLogTable = ({
         {page.map((call) => {
           const variant = badgeVariant(call.status);
           return (
-            <div className="p-4 w-full flex flex-row justify-between items-center">
+            <div
+              key={`incoming-call-${call.id}`}
+              className="p-4 w-full flex flex-row justify-between items-center"
+            >
               <div className="flex flex-col space-y-2">
                 <div className="flex flex-row space-x-2 items-center">
                   <Avatar className="h-10 w-10">

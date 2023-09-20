@@ -63,7 +63,7 @@ const OnboardingForm = () => {
       toast({
         title: "Redirecting...",
       });
-      router.push("/");
+      router.replace("/");
     },
     onError(error) {
       toast({

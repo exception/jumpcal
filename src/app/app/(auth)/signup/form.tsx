@@ -28,6 +28,9 @@ const SignupForm = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: searchParams?.get("username") ?? "",
+    },
   });
   const username = form.watch("username");
 

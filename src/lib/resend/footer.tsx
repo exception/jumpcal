@@ -5,7 +5,7 @@ interface Props {
   showUnsubscribe?: boolean;
 }
 
-const Footer = ({ intendedFor, showUnsubscribe }: Props) => {
+const Footer = ({ intendedFor }: Props) => {
   return (
     <Tailwind>
       <Hr className="my-6 w-full border border-neutral-200" />
