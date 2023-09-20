@@ -1,6 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 import MaxWidthContainer from "@/components/app/max-width-container";
-import Link from "next/link";
+import { makeMetadata } from "@/lib/utils";
+
+export const metadata = makeMetadata({
+  title: "Jumpcal | Privacy",
+});
 
 const PrivacyPage = () => {
   return (
