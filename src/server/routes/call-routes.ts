@@ -2,7 +2,11 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { env } from "@/env.mjs";
 import { qstash } from "@/lib/upstash";
-import { APP_URL_WITH_NGROK, DEFAULT_RING_DURATION, IS_ON_VERCEL } from "@/lib/constants";
+import {
+  APP_URL_WITH_NGROK,
+  DEFAULT_RING_DURATION,
+  IS_ON_VERCEL,
+} from "@/lib/constants";
 import { DateTime } from "luxon";
 import { meetingBody, zoomAuth } from "@/lib/integrations/zoom";
 
@@ -12,8 +16,8 @@ const zoomMeetingResponse = z.object({
 });
 
 const DEFAULT_GEO_DATA = {
-  country: "US"
-}
+  country: "US",
+};
 
 export const callRoutes = createTRPCRouter({
   requestCall: publicProcedure
@@ -193,7 +197,8 @@ export const callRoutes = createTRPCRouter({
         },
         data: {
           link: zoomMeeting.join_url,
-          status: "ANSWERED"
+          status: "ANSWERED",
+          acceptedAt: new Date()
         },
       });
 
@@ -212,5 +217,29 @@ export const callRoutes = createTRPCRouter({
       }
 
       return { startUrl: zoomMeeting.start_url, call: updated };
+    }),
+  callLog: protectedProcedure
+    .input(
+      z.object({
+        cursor: z.string().optional(),
+      }),
+    )
+    .query(({ ctx: { session, prisma }, input }) => {
+      return prisma.call.findMany({
+        take: 20,
+        skip: input.cursor ? 1 : 0,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+        where: {
+          status: {
+            not: "PENDING",
+          },
+          target: {
+            id: session.user.id,
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
     }),
 });

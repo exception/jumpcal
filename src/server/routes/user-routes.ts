@@ -10,7 +10,7 @@ import { isUserBusy } from "@/lib/integrations/google-calendar";
 
 const defaultSlotRange = {
   start: { hour: 9, minute: 0 },
-  end: { hour: 16, minute: 0 },
+  end: { hour: 17, minute: 0 },
 };
 
 export const userRoutes = createTRPCRouter({

@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import Navigation, { type NavItem } from "./navigation";
 import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
+import AppLayout from "@/components/app/app-layout";
 
 const navItems: NavItem[] = [
   {
@@ -30,19 +31,21 @@ const SettingsPage = ({ children }: React.PropsWithChildren<unknown>) => {
   const currentTab = navItems.find((item) => item.href === pathname);
 
   return (
-    <MaxWidthContainer className="pt-5">
-      <div className="flex items-center text-xl font-medium">
-        <h1>Settings</h1>
-        <ChevronRight className="mx-4 h-5 w-5 flex-shrink-0" />
-        <h1>{currentTab?.title}</h1>
-      </div>
-      {/* <h1 className="text-2xl font-medium">Settings  {currentTab?.title}</h1> */}
-      <Separator className="my-5" />
-      <div className="flex lg:flex-row lg:space-x-12 flex-col space-y-8 lg:space-y-0">
-        <Navigation items={navItems} />
-        {children}
-      </div>
-    </MaxWidthContainer>
+    <AppLayout>
+      <MaxWidthContainer className="pt-5">
+        <div className="flex items-center text-xl font-medium">
+          <h1>Settings</h1>
+          <ChevronRight className="mx-4 h-5 w-5 flex-shrink-0" />
+          <h1>{currentTab?.title}</h1>
+        </div>
+        {/* <h1 className="text-2xl font-medium">Settings  {currentTab?.title}</h1> */}
+        <Separator className="my-5" />
+        <div className="flex lg:flex-row lg:space-x-12 flex-col space-y-8 lg:space-y-0">
+          <Navigation items={navItems} />
+          {children}
+        </div>
+      </MaxWidthContainer>
+    </AppLayout>
   );
 };
 

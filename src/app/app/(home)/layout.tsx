@@ -3,6 +3,7 @@ import Navigation, { type NavItem } from "./navigation";
 import Greeter from "./greeter";
 import DoNotDisturbToggle from "./do-not-disturb-toggle";
 import { Home, PhoneIncoming } from "lucide-react";
+import AppLayout from "@/components/app/app-layout";
 
 const items: NavItem[] = [
   {
@@ -19,7 +20,7 @@ const items: NavItem[] = [
 
 const HomeLayout = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <>
+    <AppLayout>
       <div className="py-4 bg-white border-b border-b-neutral-200">
         <MaxWidthContainer className="flex justify-between items-center">
           <Greeter />
@@ -30,7 +31,7 @@ const HomeLayout = ({ children }: React.PropsWithChildren<unknown>) => {
         <Navigation items={items} />
         {children}
       </MaxWidthContainer>
-    </>
+    </AppLayout>
   );
 };
 

@@ -60,10 +60,10 @@ const OnboardingForm = () => {
   const onboardUserMutation = trpc.users.onboard.useMutation({
     async onSuccess() {
       await update();
-      router.push("/");
       toast({
         title: "Redirecting...",
       });
+      router.push("/");
     },
     onError(error) {
       toast({
