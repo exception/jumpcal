@@ -69,20 +69,20 @@ export const callRoutes = createTRPCRouter({
             id: input.target,
           },
           include: {
-            phoneNotification: {
+            notifications: {
               take: 1,
             }
           }
         });
 
-        const targetNotification = target?.phoneNotification[0];
+        const targetNotification = target?.notifications[0];
 
         // skip await to return faster
-        if (targetNotification?.phoneNumber && !target?.dnd) {
+        if (targetNotification?.key && !target?.dnd) {
           const isWhatsapp = targetNotification.type === "WHATSAPP";
           void twilio.messages.create({
             from: `${isWhatsapp ? "whatsapp:" : ""}${env.TWILIO_PHONE_NUMBER}`,
-            to: `${isWhatsapp ? "whatsapp:" : ""}${targetNotification.phoneNumber}`,
+            to: `${isWhatsapp ? "whatsapp:" : ""}${targetNotification.key}`,
 
             body: `You have a new Jumpcal meeting request from ${input.caller.name} who wants to talk about "${input.caller.reason}".`,
           });
