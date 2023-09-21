@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -33,6 +34,7 @@ const WhatsappNotification = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
   });
   const code = form.watch("code");
 
@@ -128,11 +130,13 @@ const WhatsappNotification = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
-                  <Input
-                    {...field}
-                    disabled={smsSent}
-                    placeholder="Phone Number"
-                  />
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={smsSent}
+                      placeholder="Phone Number"
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -144,7 +148,9 @@ const WhatsappNotification = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Code</FormLabel>
-                    <Input {...field} placeholder="Code" />
+                    <FormControl>
+                      <Input {...field} placeholder="Code" />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

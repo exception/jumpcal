@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
 import GoogleCalendarIntegration from "./google-calendar-integration";
+import CalendarTools from "./calendar-tools";
 
 const IntegrationSettings = () => {
   const searchParams = useSearchParams();
@@ -30,6 +31,7 @@ const IntegrationSettings = () => {
     >
       <ZoomIntegration />
       <GoogleCalendarIntegration />
+      <CalendarTools />
     </SettingsContainer>
   );
 };

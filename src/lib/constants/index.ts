@@ -284,3 +284,5 @@ export const APP_URL_WITH_NGROK = NGROK_URL || APP_URL;
 export const IS_ON_VERCEL = !!process.env.VERCEL_URL;
 
 export const DEFAULT_RING_DURATION = 60; // 1 minute
+
+export const CAL_OR_CALENDLY_REGEX = /^(?:https:\/\/)?(?:www\.)?(?:cal\.com|calendly\.com)\/([a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+)$/;

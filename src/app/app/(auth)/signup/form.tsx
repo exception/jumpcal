@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import GoogleIcon from "@/components/ui/icons/google-icon";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -28,6 +34,7 @@ const SignupForm = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       username: searchParams?.get("username") ?? "",
     },
@@ -64,7 +71,13 @@ const SignupForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <Input {...field} placeholder="username" addOn="jumpcal.io/" />
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="username"
+                    addOn="jumpcal.io/"
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

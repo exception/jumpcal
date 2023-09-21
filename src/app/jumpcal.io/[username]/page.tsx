@@ -6,6 +6,9 @@ import OwnProfileBanner from "./own-profile-banner";
 import AvailabilityCard from "./availability-card";
 import { type DayAvailability } from "@/lib/availability";
 import { cn } from "@/lib/utils";
+import SeparatorWithText from "@/components/ui/separator-with-text";
+import CalEmbed from "./(embeds)/cal-embed";
+import CalendlyEmbed from "./(embeds)/calendly-embed";
 
 const fetchUser = (username: string) => {
   return prisma.user.findUnique({
@@ -56,13 +59,25 @@ const UserPage = async ({ params }: Props) => {
           description={user.description ?? ""}
           layout={user.layout}
         />
-        <AvailabilityCard
-          id={user.id}
-          availability={user.availability as DayAvailability[]}
-          timezone={user.timezone ?? ""}
-          layout={user.layout}
-          name={user.name ?? ""}
-        />
+        <div className="max-w-4xl w-full space-y-4">
+          <AvailabilityCard
+            id={user.id}
+            availability={user.availability as DayAvailability[]}
+            timezone={user.timezone ?? ""}
+            layout={user.layout}
+            name={user.name ?? ""}
+          />
+          {user.calendarLink && (
+            <>
+              <SeparatorWithText text="OR" />
+              {user.calendarLink.includes("cal.com") ? (
+                <CalEmbed calendarLink={user.calendarLink} />
+              ) : (
+                <CalendlyEmbed calendarLink={user.calendarLink} />
+              )}
+            </>
+          )}
+        </div>
       </MaxWidthContainer>
     </>
   );

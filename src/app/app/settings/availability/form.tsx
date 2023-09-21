@@ -33,6 +33,7 @@ const AvailabilityContent = () => {
   const { toast } = useToast();
   const { data: session, update } = useSession();
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
       timezone:

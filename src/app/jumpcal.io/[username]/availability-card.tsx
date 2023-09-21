@@ -105,7 +105,7 @@ const AvailabilityCard = ({ id, layout = "VERTICAL", name }: Props) => {
         {availableStatus({ status: available.status as Status })}
         <motion.div
           key={"available-chat"}
-          className="flex items-center justify-between"
+          className="flex flex-col md:flex-row md:items-center md:justify-between"
         >
           <div className="flex flex-col">
             <p className="text-lg font-medium">
@@ -143,6 +143,7 @@ const AvailabilityCard = ({ id, layout = "VERTICAL", name }: Props) => {
                   size="sm"
                   disabled={isSelf}
                   onClick={() => setExpanded(!expanded)}
+                  className="mt-4 md:mt-0"
                 >
                   Call me!{" "}
                   {expanded ? (

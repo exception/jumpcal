@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -46,6 +47,7 @@ const AccountSettingsForm = () => {
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: session?.user.name ?? "",
@@ -76,7 +78,9 @@ const AccountSettingsForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Full Name</FormLabel>
-              <Input {...field} placeholder="Full Name" />
+              <FormControl>
+                <Input {...field} placeholder="Full Name" />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -87,10 +91,12 @@ const AccountSettingsForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>About</FormLabel>
-              <Textarea
-                {...field}
-                placeholder="A brief description about who you are and how you can help potential callers."
-              />
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="A brief description about who you are and how you can help potential callers."
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

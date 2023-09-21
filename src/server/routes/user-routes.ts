@@ -51,6 +51,7 @@ export const userRoutes = createTRPCRouter({
         timezone: z.string().optional(),
         description: z.string().optional(),
         layout: z.enum(["VERTICAL", "HORIZONTAL"]).optional(),
+        calendarLink: z.string().nullish()
       }),
     )
     .mutation(({ ctx: { session, prisma }, input }) => {
@@ -68,6 +69,7 @@ export const userRoutes = createTRPCRouter({
           description: input.description,
           username: input.username,
           layout: input.layout,
+          calendarLink: input.calendarLink
         },
       });
     }),

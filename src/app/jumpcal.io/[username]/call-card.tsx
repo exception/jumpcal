@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -19,9 +20,26 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  fullName: z.string(),
-  email: z.string(),
-  reason: z.string(),
+  fullName: z
+    .string()
+    .min(1, {
+      message: "Name is required.",
+    })
+    .max(36),
+  email: z
+    .string()
+    .email({
+      message: "Please provide a valid email.",
+    })
+    .min(1, {
+      message: "Email is required.",
+    }),
+  reason: z
+    .string()
+    .min(1, {
+      message: "Call reason is required.",
+    })
+    .max(1000),
 });
 
 interface Props {
@@ -35,6 +53,7 @@ const CallCard = ({ target, name }: Props) => {
   const [canceled, setCanceled] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
   });
 
   const requestCall = trpc.calls.requestCall.useMutation({
@@ -92,7 +111,9 @@ const CallCard = ({ target, name }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Full Name</FormLabel>
-                <Input {...field} placeholder="Full Name" />
+                <FormControl>
+                  <Input {...field} placeholder="Full Name" />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -103,7 +124,9 @@ const CallCard = ({ target, name }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
-                <Input {...field} placeholder="email@jumpcal.io" />
+                <FormControl>
+                  <Input {...field} placeholder="email@jumpcal.io" />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -114,10 +137,12 @@ const CallCard = ({ target, name }: Props) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Call Reason</FormLabel>
-                <Textarea
-                  {...field}
-                  placeholder="What you want to chat about."
-                />
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    placeholder="What you want to chat about."
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

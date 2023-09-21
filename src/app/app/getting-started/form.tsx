@@ -41,6 +41,7 @@ const OnboardingForm = () => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: {
       fullName: session?.user?.name ?? "",
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -87,7 +88,9 @@ const OnboardingForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Full Name</FormLabel>
-              <Input {...field} placeholder="Full Name" />
+              <FormControl>
+                <Input {...field} placeholder="Full Name" />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -98,7 +101,9 @@ const OnboardingForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
-              <Input {...field} placeholder="username" addOn="jumpcal.io/" />
+              <FormControl>
+                <Input {...field} placeholder="username" addOn="jumpcal.io/" />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
