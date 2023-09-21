@@ -13,12 +13,10 @@ export const notificationRoutes = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx: { twilio }, input }) => {
-      await twilio.verify.v2
-        .services(env.TWILIO_SERVICE)
-        .verifications.create({
-          to: input.phone,
-          channel: input.channel.toLowerCase(),
-        });
+      await twilio.verify.v2.services(env.TWILIO_SERVICE).verifications.create({
+        to: input.phone,
+        channel: input.channel.toLowerCase(),
+      });
       return true;
     }),
   verifyTwilioCode: protectedProcedure
@@ -91,8 +89,8 @@ export const notificationRoutes = createTRPCRouter({
         in: NotificationType.array().min(1),
       }),
     )
-    .query(async ({ ctx: { session, prisma }, input }) => {
-      const notifications = await prisma.notification.findMany({
+    .query(({ ctx: { session, prisma }, input }) => {
+      return prisma.notification.findMany({
         where: {
           userId: session.user.id,
           type: {
@@ -100,10 +98,9 @@ export const notificationRoutes = createTRPCRouter({
           },
         },
         select: {
-          type: true
-        }
+          type: true,
+          key: true,
+        },
       });
-
-      return new Set(notifications.map(n => n.type));
     }),
 });

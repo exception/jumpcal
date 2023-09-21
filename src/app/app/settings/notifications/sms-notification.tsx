@@ -52,8 +52,8 @@ const SmsNotification = () => {
     },
   });
 
-  const { types, isLoading, refetch } = useNotifications();
-  const isEnabled = types.has("SMS");
+  const { isLoading, refetch, get } = useNotifications();
+  const notification = get("SMS");
 
   const verifyCode = trpc.notifications.verifyTwilioCode.useMutation({
     async onSuccess({ status }) {
@@ -161,11 +161,11 @@ const SmsNotification = () => {
         </Form>
       </Modal>
       <IntegrationCard
-        loading={status === "loading" || isLoading}
+        loading={status === "loading" || isLoading || removeSms.isLoading}
         name="SMS"
         type="NOTIFICATION"
         description="Jumpcal will notify you about new calls via SMS."
-        enabled={isEnabled}
+        enabled={!!notification}
         handleDisable={() =>
           removeSms.mutate({
             type: "SMS",
@@ -174,7 +174,16 @@ const SmsNotification = () => {
         handleEnable={() => {
           setEnabling(true);
         }}
-      />
+      >
+        {notification && (
+          <p className="text-sm text-neutral-500 font-medium">
+            Verified number:{" "}
+            <span className="px-2 py-1 rounded-md border border-neutral-200 font-mono bg-neutral-100 text-xs">
+              {notification.key}
+            </span>
+          </p>
+        )}
+      </IntegrationCard>
     </>
   );
 };

@@ -38,7 +38,8 @@ const IntegrationCard = ({
   handleDisable,
   loading,
   type = "CALL",
-}: Props) => {
+  children,
+}: React.PropsWithChildren<Props>) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [enabling, setEnabling] = useState(false);
 
@@ -66,6 +67,7 @@ const IntegrationCard = ({
         <div className="space-y-2">
           <h3 className="text-base font-medium">{name}</h3>
           <p className="text-neutral-400 text-sm">{description}</p>
+          {children}
         </div>
         {loading && <Skeleton className="w-12 h-6 rounded-full" />}
         {!loading && (

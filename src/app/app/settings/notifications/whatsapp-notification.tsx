@@ -52,8 +52,8 @@ const WhatsappNotification = () => {
     },
   });
 
-  const { types, isLoading, refetch } = useNotifications();
-  const isEnabled = types.has("WHATSAPP");
+  const { isLoading, refetch, get } = useNotifications();
+  const notification = get("WHATSAPP");
 
   const verifyCode = trpc.notifications.verifyTwilioCode.useMutation({
     async onSuccess({ status }) {
@@ -161,11 +161,11 @@ const WhatsappNotification = () => {
         </Form>
       </Modal>
       <IntegrationCard
-        loading={status === "loading" || isLoading}
+        loading={status === "loading" || isLoading || removeSms.isLoading}
         name="WhatsApp"
         type="NOTIFICATION"
         description="Jumpcal will notify you about new calls via WhatsApp."
-        enabled={isEnabled}
+        enabled={!!notification}
         handleDisable={() =>
           removeSms.mutate({
             type: "WHATSAPP",
