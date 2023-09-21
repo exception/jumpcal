@@ -1,7 +1,7 @@
 import { type NextRequest } from "next/server";
 
 const LANDING_DOMAINS = new Set(["landing.localhost:3000", "jumpcal.io"]);
-const APP_DOMAINS = new Set(["localhost:3000", "app.jumpcal.io"]);
+const APP_DOMAINS = new Set(["localhost:3000", "app.jumpcal.io", "preview.jumpcal.io"]);
 
 export const isLanding = (domain: string) => {
   return LANDING_DOMAINS.has(domain) || domain.endsWith(".vercel.app");
