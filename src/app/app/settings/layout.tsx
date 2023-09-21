@@ -40,7 +40,7 @@ const SettingsPage = ({ children }: React.PropsWithChildren<unknown>) => {
         </div>
         {/* <h1 className="text-2xl font-medium">Settings  {currentTab?.title}</h1> */}
         <Separator className="my-5" />
-        <div className="flex lg:flex-row lg:space-x-12 flex-col space-y-8 lg:space-y-0">
+        <div className="flex items-start lg:flex-row lg:space-x-12 flex-col space-y-8 lg:space-y-0">
           <Navigation items={navItems} />
           {children}
         </div>

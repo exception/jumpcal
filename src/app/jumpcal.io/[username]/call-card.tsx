@@ -138,8 +138,16 @@ const CallCard = ({ target, name }: Props) => {
   if (call?.status === "MISSED" || call?.status === "REJECTED") {
     return (
       <div className="flex flex-row items-center gap-x-4 pt-2 px-2">
-        <PhoneMissedIcon className="h-10 w-10 text-neutral-400" />
-        <p className="text-lg text-neutral-400">Sorry we missed you.</p>
+        <PhoneMissedIcon className="h-10 w-10 text-neutral-900" />
+        <div className="flex flex-col">
+          <p className="text-lg text-neutral-900">
+            Sorry, {name} wasn&apos;t able to answer.
+          </p>
+          <p className="text-sm text-neutral-400">
+            Don&apos;t worry though, you can schedule a call using the cards
+            below!
+          </p>
+        </div>
       </div>
     );
   }

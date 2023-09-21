@@ -174,25 +174,23 @@ export const userRoutes = createTRPCRouter({
       }),
     )
     .query(async ({ ctx: { prisma }, input }) => {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findUniqueOrThrow({
         where: {
           id: input.userId,
         },
         include: {
-          integrations: {
-            where: {
-              type: "CALENDAR_GCAL",
-            },
-          },
+          integrations: true
         },
       });
 
-      if (!user) {
-        throw new Error("Unknown user.");
+      const hasCallingIntegration = user.integrations.find(integration => integration.type === "ZOOM");
+
+      if (!hasCallingIntegration) {
+        return { status: "offline" };
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      if (user.integrations?.length === 0) {
+      const gcal = user.integrations.find(integration => integration.type === "CALENDAR_GCAL");
+      if (!gcal) {
         if (
           !isUserAvailable(
             user.availability as DayAvailability[],
@@ -205,11 +203,7 @@ export const userRoutes = createTRPCRouter({
         return { status: "online" };
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-non-null-asserted-optional-chain
-      const googleIntegartion = user?.integrations[0]!;
-
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const isBusy = await isUserBusy(googleIntegartion);
+      const isBusy = await isUserBusy(gcal);
       if (isBusy) {
         return { status: "busy" };
       }

@@ -1,5 +1,6 @@
 import {
   Body,
+  Button,
   Container,
   Head,
   Heading,
@@ -11,6 +12,8 @@ import {
   Text,
 } from "@react-email/components";
 import Footer from "../footer";
+import { APP_URL } from "@/lib/constants";
+import { firstName } from "@/lib/utils";
 
 interface Props {
   name: string;
@@ -33,11 +36,24 @@ const WelcomeEmail = ({ name, email }: Props) => {
               />
             </Section>
             <Heading className="my-5 text-center text-xl font-semibold text-neutral-950">
-              Welcome to Jumpcal!
+              Jump Right Into Jumpcal!
             </Heading>
-            <Text className="text-sm text-black mx-auto">
-              Thank you for choosing Jumpcal, {name}.
+            <Text className="text-sm text-neutral-950">
+              Thank you for hopping on board, {firstName(name) ?? name}. With
+              Jumpcal, you&apos;re just a leap away from seamless call
+              scheduling.
             </Text>
+            <Text className="text-sm text-neutral-950">
+              To begin, kindly set up an integration and mark your availability
+              from your settings. And remember, the early bird doesn&apos;t just
+              get the worm; they also avoid back-to-back meetings!
+            </Text>
+            <Button
+              href={`${APP_URL}/settings/integrations`}
+              className="px-4 py-2 bg-black rounded-md text-white text-center text-sm"
+            >
+              Ready, Set, Jump!
+            </Button>
             <Footer intendedFor={email} showUnsubscribe />
           </Container>
         </Body>

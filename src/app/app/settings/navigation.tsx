@@ -18,7 +18,7 @@ const Navigation = ({ items }: Props) => {
   const path = usePathname();
 
   return (
-    <nav className="flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 max-w- md:w-64">
+    <nav className="sticky top-20 flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 md:w-64 grow-0 h-auto">
       {items.map((item) => (
         <Link
           key={item.href}
