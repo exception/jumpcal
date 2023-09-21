@@ -22,7 +22,7 @@ const LandingPage = () => {
             That hot lead is ready to chat right now, seize the opportunity for
             a conversation in the moment.{" "}
           </p>
-          <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2 self-center lg:self-start">
+          <div className="flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:space-x-2 self-center lg:self-start w-full sm:w-auto">
             <Input
               type="text"
               maxLength={16}

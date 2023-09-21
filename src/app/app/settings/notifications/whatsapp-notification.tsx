@@ -53,7 +53,7 @@ const WhatsappNotification = () => {
 
   const { data, isLoading, refetch } = trpc.notifications.has.useQuery(
     {
-      type: "whatsapp",
+      type: "WHATSAPP",
     },
     {
       enabled: status === "authenticated",
@@ -104,13 +104,13 @@ const WhatsappNotification = () => {
     if (!smsSent) {
       sendCode.mutate({
         phone: form.phoneNumber,
-        channel: "whatsapp",
+        channel: "WHATSAPP",
       });
     } else {
       verifyCode.mutate({
         phone: form.phoneNumber,
         code: form.code!,
-        channel: "whatsapp",
+        channel: "WHATSAPP",
       });
     }
   };
@@ -173,7 +173,7 @@ const WhatsappNotification = () => {
         enabled={data ?? false}
         handleDisable={() =>
           removeSms.mutate({
-            type: "whatsapp",
+            type: "WHATSAPP",
           })
         }
         handleEnable={() => {

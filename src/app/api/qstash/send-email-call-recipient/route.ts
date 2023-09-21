@@ -2,6 +2,7 @@ import { prisma } from "@/db";
 import { sendEmail } from "@/lib/resend";
 import CallSurvey from "@/lib/resend/emails/call-survey";
 import { receiver } from "@/lib/upstash";
+import { firstName } from "@/lib/utils";
 import { z } from "zod";
 
 const bodySchema = z.object({
@@ -48,7 +49,7 @@ export async function POST(req: Request) {
     );
     await sendEmail({
       to: call.callerEmail,
-      subject: `How was your call with ${call.target.name}`,
+      subject: `How was your call with ${firstName(call.target.name!) ?? call.target.name}`,
       content: CallSurvey({
         callId,
         callerEmail: call.callerEmail,

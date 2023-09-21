@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { type Metadata } from "next";
 import { twMerge } from "tailwind-merge";
+import { APP_URL } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,10 +14,11 @@ interface MetadataProps {
 
 export const makeMetadata = ({
   title = "Jumpcal",
-  description = "Jumpcal: Revolutionizing Call Scheduling. Effortlessly book and manage calls with Jumpcal's intuitive interface. Say goodbye to time zone confusions and back-to-back meetings. Jump right into seamless scheduling today!",
+  description = "Jumpcal: Revolutionizing Call Scheduling. Effortlessly book and manage calls with Jumpcal's intuitive interface. Say goodbye to timezone confusions and back-to-back meetings. Jump right into seamless scheduling today!",
 }: MetadataProps = {}): Metadata => {
   return {
     title,
+    metadataBase: new URL(APP_URL),
     icons: "/favicon.ico",
     description,
     openGraph: {

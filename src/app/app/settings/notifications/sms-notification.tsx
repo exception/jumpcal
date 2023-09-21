@@ -53,7 +53,7 @@ const SmsNotification = () => {
 
   const { data, isLoading, refetch } = trpc.notifications.has.useQuery(
     {
-      type: "sms",
+      type: "SMS",
     },
     {
       enabled: status === "authenticated",
@@ -104,13 +104,13 @@ const SmsNotification = () => {
     if (!smsSent) {
       sendCode.mutate({
         phone: form.phoneNumber,
-        channel: "sms",
+        channel: "SMS",
       });
     } else {
       verifyCode.mutate({
         phone: form.phoneNumber,
         code: form.code!,
-        channel: "sms",
+        channel: "SMS",
       });
     }
   };
@@ -173,7 +173,7 @@ const SmsNotification = () => {
         enabled={data ?? false}
         handleDisable={() =>
           removeSms.mutate({
-            type: "sms",
+            type: "SMS",
           })
         }
         handleEnable={() => {

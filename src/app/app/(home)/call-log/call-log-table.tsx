@@ -1,6 +1,12 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  type CountryCode,
+  countryNameRecord,
+  getCountryFlagEmoji,
+} from "@/lib/constants";
 import { type Call } from "@prisma/client";
 import { type VariantProps } from "class-variance-authority";
 import { ArrowLeft, ArrowRight, Mail } from "lucide-react";
@@ -51,15 +57,15 @@ const CallLogTable = ({
               key={`incoming-call-${call.id}`}
               className="p-4 w-full flex flex-row justify-between items-center"
             >
-              <div className="flex flex-col space-y-2">
-                <div className="flex flex-row space-x-2 items-center">
+              <div className="flex flex-col w-full">
+                <div className="flex flex-row space-x-2 items-center mb-2">
                   <Avatar className="h-10 w-10">
                     <AvatarImage
                       alt={call.callerName}
                       src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${call.callerEmail}&scale=80&backgroundColor=ec4899`}
                     />
                   </Avatar>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col mb-2">
                     <p className="text-sm font-medium text-neutral-950">
                       {call.callerName}
                     </p>
@@ -73,9 +79,16 @@ const CallLogTable = ({
                     <Badge variant={variant}>{call.status}</Badge>
                   </div>
                   <p className="text-xs font-medium text-neutral-950">
-                    Called {DateTime.fromJSDate(call.createdAt).toRelative()}.
+                    Called {DateTime.fromJSDate(call.createdAt).toRelative()}{" "}
+                    from {countryNameRecord[call.countryCode as CountryCode]}{" "}
+                    {getCountryFlagEmoji(call.countryCode as CountryCode)}.
                   </p>
                 </div>
+                <Separator className="w-full my-4" />
+                <p className="text-sm font-normal text-neutral-500">
+                  <span className="font-medium">Call reason: </span>
+                  {call.callerReason}
+                </p>
               </div>
               {call.status === "ANSWERED" && (
                 <Link
