@@ -15,7 +15,10 @@ export const notificationRoutes = createTRPCRouter({
     .mutation(async ({ ctx: { twilio }, input }) => {
       await twilio.verify.v2
         .services(env.TWILIO_SERVICE)
-        .verifications.create({ to: input.phone, channel: input.channel.toLowerCase() });
+        .verifications.create({
+          to: input.phone,
+          channel: input.channel.toLowerCase(),
+        });
       return true;
     }),
   verifyTwilioCode: protectedProcedure
@@ -48,7 +51,7 @@ export const notificationRoutes = createTRPCRouter({
 
       return { status: "not-verified" };
     }),
-remove: protectedProcedure
+  remove: protectedProcedure
     .input(
       z.object({
         type: NotificationType,
@@ -64,22 +67,43 @@ remove: protectedProcedure
         },
       });
     }),
-  has: protectedProcedure
+  // has: protectedProcedure
+  //   .input(
+  //     z.object({
+  //       type: NotificationType,
+  //     }),
+  //   )
+  //   .query(async ({ ctx: { session, prisma }, input }) => {
+  //     const notification = await prisma.notification.findUnique({
+  //       where: {
+  //         userId_type: {
+  //           type: input.type,
+  //           userId: session.user.id,
+  //         },
+  //       },
+  //     });
+
+  //     return !!notification;
+  //   }),
+  get: protectedProcedure
     .input(
       z.object({
-        type: NotificationType,
+        in: NotificationType.array().min(1),
       }),
     )
     .query(async ({ ctx: { session, prisma }, input }) => {
-      const notification = await prisma.notification.findUnique({
+      const notifications = await prisma.notification.findMany({
         where: {
-          userId_type: {
-            type: input.type,
-            userId: session.user.id,
+          userId: session.user.id,
+          type: {
+            in: input.in,
           },
         },
+        select: {
+          type: true
+        }
       });
 
-      return !!notification;
+      return new Set(notifications.map(n => n.type));
     }),
 });

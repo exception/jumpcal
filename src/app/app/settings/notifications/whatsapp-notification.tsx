@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { useToast } from "@/components/ui/use-toast";
+import { useNotifications } from "./notification-provider";
 
 const formSchema = z.object({
   phoneNumber: z.string().min(1),
@@ -51,14 +52,8 @@ const WhatsappNotification = () => {
     },
   });
 
-  const { data, isLoading, refetch } = trpc.notifications.has.useQuery(
-    {
-      type: "WHATSAPP",
-    },
-    {
-      enabled: status === "authenticated",
-    },
-  );
+  const { types, isLoading, refetch } = useNotifications();
+  const isEnabled = types.has("WHATSAPP");
 
   const verifyCode = trpc.notifications.verifyTwilioCode.useMutation({
     async onSuccess({ status }) {
@@ -170,7 +165,7 @@ const WhatsappNotification = () => {
         name="WhatsApp"
         type="NOTIFICATION"
         description="Jumpcal will notify you about new calls via WhatsApp."
-        enabled={data ?? false}
+        enabled={isEnabled}
         handleDisable={() =>
           removeSms.mutate({
             type: "WHATSAPP",

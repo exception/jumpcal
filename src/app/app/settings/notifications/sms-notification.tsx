@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { useToast } from "@/components/ui/use-toast";
+import { useNotifications } from "./notification-provider";
 
 const formSchema = z.object({
   phoneNumber: z.string().min(1),
@@ -51,14 +52,8 @@ const SmsNotification = () => {
     },
   });
 
-  const { data, isLoading, refetch } = trpc.notifications.has.useQuery(
-    {
-      type: "SMS",
-    },
-    {
-      enabled: status === "authenticated",
-    },
-  );
+  const { types, isLoading, refetch } = useNotifications();
+  const isEnabled = types.has("SMS");
 
   const verifyCode = trpc.notifications.verifyTwilioCode.useMutation({
     async onSuccess({ status }) {
@@ -170,7 +165,7 @@ const SmsNotification = () => {
         name="SMS"
         type="NOTIFICATION"
         description="Jumpcal will notify you about new calls via SMS."
-        enabled={data ?? false}
+        enabled={isEnabled}
         handleDisable={() =>
           removeSms.mutate({
             type: "SMS",
