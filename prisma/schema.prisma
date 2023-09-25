@@ -50,18 +50,20 @@ model VerificationToken {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
+  name          String
+  email         String    @unique
   emailVerified DateTime?
   username      String?   @unique
   image         String?
 
-  description  String?
-  availability Json?   @db.Json
-  timezone     String?
-  calendarLink String?
-  dnd          Boolean @default(false)
-  layout       Layout  @default(VERTICAL)
+  description      String?
+  availability     Json?   @db.Json
+  timezone         String?
+  calendarLink     String?
+  dnd              Boolean @default(false)
+  layout           Layout  @default(VERTICAL)
+  stripeCustomerId String?
+  isPremium        Boolean @default(false)
 
   joinedAt  DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -72,6 +74,8 @@ model User {
   callLog       Call[]         @relation(name: "call_receiver")
   integrations  Integration[]
   notifications Notification[]
+
+  @@index([stripeCustomerId])
 }
 
 enum Layout {

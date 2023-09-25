@@ -3,6 +3,7 @@ import AccountSettingsForm from "./form";
 import SettingsContainer from "./settings-container";
 import UploadAvatarRow from "./upload-avatar";
 import LayoutSettings from "./layout-settings";
+import UsernameRow from "./username-row";
 
 export const metadata = makeMetadata({
   title: "Jumpcal - Account Settings",
@@ -15,6 +16,7 @@ const AccountSettings = () => {
       description="This is how you will appear to the world."
     >
       <UploadAvatarRow />
+      <UsernameRow />
       <AccountSettingsForm />
       <LayoutSettings />
     </SettingsContainer>

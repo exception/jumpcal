@@ -7,12 +7,16 @@ import { usePathname } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import AppLayout from "@/components/app/app-layout";
 import React, { useMemo } from "react";
-import { capitalize } from "@/lib/utils";
+import { capitalize } from "radash";
 
 const navItems: NavItem[] = [
   {
     href: "/settings",
     title: "Account",
+  },
+  {
+    href: "/settings/billing",
+    title: "Billing",
   },
   {
     href: "/settings/availability",

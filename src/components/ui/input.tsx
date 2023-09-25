@@ -11,8 +11,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, addOn, type, ...props }, ref) => {
     if (addOn) {
       return (
-        <div className="relative">
-          <div className="flex focus-within:ring-2 focus-within:ring-neutral-950 focus-within:ring-offset-2 focus-within:rounded-md">
+        <div className="relative w-full">
+          <div className="flex focus-within:ring-2 focus-within:ring-neutral-950 focus-within:ring-offset-2 focus-within:rounded-md w-full">
             <span className="inline-flex items-center rounded-l-md border border-neutral-200 bg-neutral-100 px-3 text-neutral-500 sm:text-sm">
               {addOn}
             </span>

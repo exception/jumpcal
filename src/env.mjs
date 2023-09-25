@@ -28,10 +28,15 @@ export const env = createEnv({
     QSTASH_CURRENT_SIGNING_KEY: z.string().min(1),
     QSTASH_NEXT_SIGNING_KEY: z.string().min(1),
     QSTASH_CLIENT_TOKEN: z.string().min(1),
+    UPSTASH_REDIS_URL: z.string(),
+    UPSTASH_REDIS_TOKEN: z.string().min(1),
 
     RESEND_API_KEY: z.string().min(1),
 
     NGROK_URL: z.string().optional(),
+
+    STRIPE_SECRET_KEY: z.string().min(1),
+    STRIPE_PREMIUM_PRICE_ID: z.string().min(1),
   },
 
   client: {
@@ -58,5 +63,9 @@ export const env = createEnv({
     QSTASH_CLIENT_TOKEN: process.env.QSTASH_CLIENT_TOKEN,
     NGROK_URL: process.env.NGROK_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_PREMIUM_PRICE_ID: process.env.STRIPE_PREMIUM_PRICE_ID,
+    UPSTASH_REDIS_URL: process.env.UPSTASH_REDIS_URL,
+    UPSTASH_REDIS_TOKEN: process.env.UPSTASH_REDIS_TOKEN,
   },
 });

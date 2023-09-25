@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { capitalize, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import {
   type Day,
   type DayAvailability,
@@ -16,6 +16,7 @@ import {
 } from "@/lib/availability";
 import { Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { capitalize } from "radash";
 
 const isTimeGreater = (time1: Time, time2: Time): boolean => {
   return (

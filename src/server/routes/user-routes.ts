@@ -7,6 +7,7 @@ import {
   isUserAvailable,
 } from "@/lib/availability";
 import { isUserBusy } from "@/lib/integrations/google-calendar";
+import { checkPremiumUsername } from "@/lib/premium";
 
 const defaultSlotRange = {
   start: { hour: 9, minute: 0 },
@@ -51,12 +52,28 @@ export const userRoutes = createTRPCRouter({
         timezone: z.string().optional(),
         description: z.string().optional(),
         layout: z.enum(["VERTICAL", "HORIZONTAL"]).optional(),
-        calendarLink: z.string().nullish()
+        calendarLink: z.string().nullish(),
       }),
     )
-    .mutation(({ ctx: { session, prisma }, input }) => {
+    .mutation(async ({ ctx: { session, prisma }, input }) => {
       if (input.username) {
-        // todo validate if premium username or such
+        const username = await checkPremiumUsername(input.username);
+        if (!username.available) {
+          throw new Error("Username is no longer available.");
+        }
+
+        if (username.premium && !session.user.isPremium) {
+          throw new Error("Username requires a premium account");
+        }
+
+        return prisma.user.update({
+          where: {
+            id: session.user.id,
+          },
+          data: {
+            username: input.username,
+          },
+        });
       }
 
       return prisma.user.update({
@@ -69,7 +86,7 @@ export const userRoutes = createTRPCRouter({
           description: input.description,
           username: input.username,
           layout: input.layout,
-          calendarLink: input.calendarLink
+          calendarLink: input.calendarLink,
         },
       });
     }),
@@ -181,17 +198,21 @@ export const userRoutes = createTRPCRouter({
           id: input.userId,
         },
         include: {
-          integrations: true
+          integrations: true,
         },
       });
 
-      const hasCallingIntegration = user.integrations.find(integration => integration.type === "ZOOM");
+      const hasCallingIntegration = user.integrations.find(
+        (integration) => integration.type === "ZOOM",
+      );
 
       if (!hasCallingIntegration) {
         return { status: "offline" };
       }
 
-      const gcal = user.integrations.find(integration => integration.type === "CALENDAR_GCAL");
+      const gcal = user.integrations.find(
+        (integration) => integration.type === "CALENDAR_GCAL",
+      );
       if (!gcal) {
         if (
           !isUserAvailable(
@@ -250,5 +271,14 @@ export const userRoutes = createTRPCRouter({
           availability: input.availability,
         },
       });
+    }),
+  usernameAvailability: publicProcedure
+    .input(
+      z.object({
+        username: z.string().min(1).toLowerCase(),
+      }),
+    )
+    .mutation(({ input }) => {
+      return checkPremiumUsername(input.username);
     }),
 });

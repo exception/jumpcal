@@ -33,9 +33,6 @@ export const makeMetadata = ({
   };
 };
 
-export const capitalize = (str: string): string =>
-  str.charAt(0).toUpperCase() + str.slice(1);
-
 export const firstName = (fullName: string) => {
   if (!fullName) {
     return "";
