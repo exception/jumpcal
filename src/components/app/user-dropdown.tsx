@@ -12,8 +12,9 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, MoonIcon, Settings } from "lucide-react";
+import { Eye, LogOut, MoonIcon, Settings } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { HOMEPAGE_URL } from "@/lib/constants";
 
 const UserDropdown = () => {
   const { data: session, status } = useSession();
@@ -65,6 +66,12 @@ const UserDropdown = () => {
           <DropdownMenuItem className="flex w-full hover:cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
             Settings
+          </DropdownMenuItem>
+        </Link>
+        <Link href={`${HOMEPAGE_URL}/${session?.user.username}`}>
+          <DropdownMenuItem className="flex w-full hover:cursor-pointer">
+            <Eye className="mr-2 h-4 w-4" />
+            Preview Profile
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />

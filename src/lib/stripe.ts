@@ -19,8 +19,10 @@ export const getStripeCustomerId = async (user: User): Promise<string> => {
 
   let customerId: string | null = null;
 
-  if (customersResponse.data[0]?.id) {
-    customerId = customersResponse.data[0]?.id;
+  const customer = customersResponse.data[0];
+
+  if (customer?.id && !customer.deleted) {
+    customerId = customer.id;
   } else {
     const customer = await stripe.customers.create({ email: user.email });
     customerId = customer.id;

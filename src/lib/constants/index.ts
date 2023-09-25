@@ -276,7 +276,7 @@ export const HOMEPAGE_URL =
     ? "https://jumpcal.io"
     : process.env.NEXT_PUBLIC_VERCEL_ENV === "preview"
     ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+    : "http://landing.localhost:3000";
 
 const NGROK_URL = process.env.NGROK_URL ?? "";
 export const APP_URL_WITH_NGROK = NGROK_URL || APP_URL;

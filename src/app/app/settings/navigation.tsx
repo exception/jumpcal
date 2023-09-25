@@ -24,8 +24,8 @@ const Navigation = ({ items }: Props) => {
   return (
     <nav
       className={cn(
-        "sticky top-20 flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 md:w-64 grow-0 h-auto transition-all",
-        isMobile && scrolled && "bg-white border-b border-b-neutral-200",
+        "sticky top-16 lg:top-20 flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1 md:w-64 grow-0 h-auto transition-all py-2 lg:py-0 z-50",
+        isMobile && scrolled && "bg-white border-b border-t border-neutral-200",
       )}
     >
       {items.map((item) => (

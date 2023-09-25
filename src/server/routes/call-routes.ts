@@ -184,7 +184,7 @@ export const callRoutes = createTRPCRouter({
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
         },
-        body: JSON.stringify(meetingBody(call, session.user.name!)),
+        body: JSON.stringify(meetingBody(call, session.user.name)),
       });
 
       const zoomResponse = await response.json();

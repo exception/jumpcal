@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,13 +11,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Modal from "@/components/ui/modal";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { APP_URL } from "@/lib/constants";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Star } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { debounce } from "radash";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,7 +35,7 @@ const UsernameRow = () => {
   const { data: session, update } = useSession();
   const [usernameIsAvailable, setUsernameIsAvailable] = useState(false);
   const [usernameIsPremium, setUsernameIsPremium] = useState(false);
-  const router = useRouter();
+  const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -50,6 +52,7 @@ const UsernameRow = () => {
       toast({
         title: "Username has been changed successfully!",
       });
+      setModalOpen(false);
     },
   });
 
@@ -65,15 +68,8 @@ const UsernameRow = () => {
 
   const username = form.watch("username");
 
-  const onSubmit = (form: z.infer<typeof formSchema>) => {
-    if (usernameIsPremium && !session?.user.isPremium) {
-      const redirectUri = `${APP_URL}/api/stripe/upgrade?username=${form.username}`;
-      router.push(redirectUri);
-    } else {
-      updateUsername.mutate({
-        username,
-      });
-    }
+  const onSubmit = () => {
+    setModalOpen(true);
   };
 
   const checkAvailable = useMemo(
@@ -101,50 +97,94 @@ const UsernameRow = () => {
   }, [session?.user.username, username]);
 
   return (
-    <Form {...form}>
-      <form
-        className="flex flex-col space-y-2"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input
-                  className="w-full"
-                  addOn="jumpcal.io/"
-                  placeholder="username"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {(usernameIsAvailable || usernameIsPremium) &&
-          username !== session?.user.username &&
-          form.formState.isValid && (
+    <>
+      <Form {...form}>
+        <form
+          className="flex flex-col space-y-2"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input
+                    className="w-full"
+                    addOn="jumpcal.io/"
+                    placeholder="username"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {(usernameIsAvailable || usernameIsPremium) &&
+            username !== session?.user.username &&
+            form.formState.isValid && (
+              <Button
+                size="sm"
+                className="self-end transition-all"
+                variant={
+                  usernameIsPremium && !session?.user.isPremium
+                    ? "pink"
+                    : "default"
+                }
+                icon={
+                  usernameIsPremium &&
+                  !session?.user.isPremium && <Star className="h-4 w-4" />
+                }
+              >
+                Update
+              </Button>
+            )}
+        </form>
+      </Form>
+      <Modal open={modalOpen} setOpen={setModalOpen}>
+        <div className="flex flex-col space-y-2 w-full">
+          <h2 className="text-lg font-medium">Change username</h2>
+          <p className="text-sm text-neutral-400">
+            You are about to change your username
+          </p>
+          <Separator className="!my-3" />
+          <div className="flex flex-row space-x-2">
             <Button
-              size="sm"
-              className="self-end transition-all"
-              variant={
-                usernameIsPremium && !session?.user.isPremium
-                  ? "pink"
-                  : "default"
-              }
-              icon={
-                usernameIsPremium &&
-                !session?.user.isPremium && <Star className="h-4 w-4" />
-              }
+              variant="secondary"
+              className="w-full"
+              onClick={() => setModalOpen(false)}
             >
-              Update
+              Cancel
             </Button>
-          )}
-      </form>
-    </Form>
+            {usernameIsPremium && !session?.user.isPremium ? (
+              <Link
+                href={`${APP_URL}/api/stripe/upgrade?username=${username}`}
+                className={buttonVariants({
+                  variant: "pink",
+                  className: "!w-full",
+                })}
+              >
+                <Star className="h-4 w-4" /> Update
+              </Link>
+            ) : (
+              <Button
+                variant="default"
+                loading={updateUsername.isLoading}
+                className="w-full"
+                onClick={() =>
+                  updateUsername.mutate({
+                    username,
+                  })
+                }
+              >
+                Continue
+              </Button>
+            )}
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };
 

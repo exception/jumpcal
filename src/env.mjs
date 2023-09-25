@@ -28,8 +28,8 @@ export const env = createEnv({
     QSTASH_CURRENT_SIGNING_KEY: z.string().min(1),
     QSTASH_NEXT_SIGNING_KEY: z.string().min(1),
     QSTASH_CLIENT_TOKEN: z.string().min(1),
-    UPSTASH_REDIS_URL: z.string(),
-    UPSTASH_REDIS_TOKEN: z.string().min(1),
+    UPSTASH_REDIS_URL: z.string().optional(),
+    UPSTASH_REDIS_TOKEN: z.string().optional(),
 
     RESEND_API_KEY: z.string().min(1),
 
