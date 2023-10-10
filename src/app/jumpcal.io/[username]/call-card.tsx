@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, PhoneCall, PhoneMissedIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -49,9 +50,14 @@ interface Props {
 
 const CallCard = ({ target, name }: Props) => {
   const router = useRouter();
+  const { data: session } = useSession();
   const [callId, setCallId] = useState("");
   const [canceled, setCanceled] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
+    defaultValues: {
+      email: session?.user.email ?? "",
+      fullName: session?.user.name ?? "",
+    },
     resolver: zodResolver(formSchema),
     mode: "onChange",
   });

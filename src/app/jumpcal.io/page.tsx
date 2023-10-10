@@ -32,7 +32,10 @@ const LandingPage = () => {
             />
             <Link
               href={`${APP_URL}/signup`}
-              className={buttonVariants({ variant: "pink" })}
+              className={buttonVariants({
+                variant: "pink",
+                className: "shrink-0",
+              })}
             >
               Claim Username <ArrowRight className="h-4 w-4" />
             </Link>

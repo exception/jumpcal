@@ -6,10 +6,12 @@ import JumpcalLogoFull from "@/components/ui/icons/jumpcal-logo-full";
 import { APP_URL } from "@/lib/constants";
 import { useScroll } from "@/lib/hooks/use-scroll";
 import { cn } from "@/lib/utils";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 const MarketingNavigation = () => {
   const hasScrolled = useScroll(30);
+  const { status } = useSession();
 
   return (
     <div
@@ -23,20 +25,30 @@ const MarketingNavigation = () => {
           <Link href={"/"}>
             <JumpcalLogoFull className="active:scale-95 transition-all" />
           </Link>
-          <div className="flex space-x-2">
-            <Link
-              className={buttonVariants({ variant: "link" })}
-              href={`${APP_URL}/signin`}
-            >
-              Sign In
-            </Link>
+          {status !== "authenticated" && (
+            <div className="flex space-x-2">
+              <Link
+                className={buttonVariants({ variant: "link" })}
+                href={`${APP_URL}/signin`}
+              >
+                Sign In
+              </Link>
+              <Link
+                className={buttonVariants({ variant: "default" })}
+                href={`${APP_URL}/signup`}
+              >
+                Sign Up
+              </Link>
+            </div>
+          )}
+          {status === "authenticated" && (
             <Link
               className={buttonVariants({ variant: "default" })}
-              href={`${APP_URL}/signup`}
+              href={`${APP_URL}`}
             >
-              Sign Up
+              Go To App
             </Link>
-          </div>
+          )}
         </div>
       </MaxWidthContainer>
     </div>
