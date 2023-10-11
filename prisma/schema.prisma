@@ -64,6 +64,8 @@ model User {
   layout           Layout  @default(VERTICAL)
   stripeCustomerId String?
   isPremium        Boolean @default(false)
+  monthlyUsage     Int     @default(0)
+  maxUsage         Int     @default(50) // -1 represents infinity
 
   joinedAt  DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt

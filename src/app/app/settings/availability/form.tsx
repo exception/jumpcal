@@ -19,11 +19,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { SaveIcon } from "lucide-react";
+import { Clock, SaveIcon } from "lucide-react";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import AvailabilityTable from "./availability-table";
+import dynamic from "next/dynamic";
+
+const DynamicBadge = dynamic(
+  () => import("@/components/ui/badge").then((mod) => mod.Badge),
+  { ssr: false },
+);
 
 const formSchema = z.object({
   timezone: z.string(),
@@ -41,6 +47,8 @@ const AvailabilityContent = () => {
         Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   });
+
+  const timeZone = form.watch("timezone");
 
   const saveTimezone = trpc.users.update.useMutation({
     async onSuccess() {
@@ -93,15 +101,24 @@ const AvailabilityContent = () => {
               </FormItem>
             )}
           />
-          <Button
-            disabled={!form.formState.isDirty || !form.formState.isValid}
-            size="sm"
-            className="self-end"
-            icon={<SaveIcon className="w-4 h-4" />}
-            loading={saveTimezone.isLoading}
-          >
-            Save
-          </Button>
+          <div className="flex justify-between w-full">
+            <DynamicBadge variant="default" className="grow-0">
+              <Clock className="h-4 w-4 mr-2" />
+              {new Date().toLocaleString("en-US", {
+                timeZone,
+                timeStyle: "short",
+              })}
+            </DynamicBadge>
+            <Button
+              disabled={!form.formState.isDirty || !form.formState.isValid}
+              size="sm"
+              className="self-end"
+              icon={<SaveIcon className="w-4 h-4" />}
+              loading={saveTimezone.isLoading}
+            >
+              Save
+            </Button>
+          </div>
         </form>
       </Form>
       <AvailabilityTable />

@@ -281,4 +281,17 @@ export const userRoutes = createTRPCRouter({
     .mutation(({ input }) => {
       return checkPremiumUsername(input.username);
     }),
+  usage: protectedProcedure.query(async ({ ctx: { session, prisma } }) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+      select: {
+        monthlyUsage: true,
+        maxUsage: true,
+      },
+    });
+
+    return { usage: user?.monthlyUsage, max: user?.maxUsage };
+  }),
 });

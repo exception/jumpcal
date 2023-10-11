@@ -8,6 +8,8 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { ExternalLink } from "lucide-react";
+import Usage from "./usage";
+import { Separator } from "@/components/ui/separator";
 
 const BillingSettings = () => {
   const { update } = useSession();
@@ -55,6 +57,8 @@ const BillingSettings = () => {
           Billing Page
         </Link>
       </div>
+      <Separator />
+      <Usage />
     </SettingsContainer>
   );
 };

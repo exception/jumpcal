@@ -71,8 +71,8 @@ export const callRoutes = createTRPCRouter({
           include: {
             notifications: {
               take: 1,
-            }
-          }
+            },
+          },
         });
 
         const targetNotification = target?.notifications[0];
@@ -136,7 +136,8 @@ export const callRoutes = createTRPCRouter({
       const differenceInSeconds = differenceInMilliseconds / 1000;
 
       return {
-        status: differenceInSeconds > DEFAULT_RING_DURATION ? "MISSED" : call.status,
+        status:
+          differenceInSeconds > DEFAULT_RING_DURATION ? "MISSED" : call.status,
         ringingFor: differenceInSeconds,
         host: { type: call.hostedOn, link: call.link },
       };
@@ -197,7 +198,16 @@ export const callRoutes = createTRPCRouter({
         data: {
           link: zoomMeeting.join_url,
           status: "ANSWERED",
-          acceptedAt: new Date()
+          acceptedAt: new Date(),
+        },
+      });
+
+      void prisma.user.update({
+        where: {
+          id: session.user.id,
+        },
+        data: {
+          monthlyUsage: { increment: 1 },
         },
       });
 
