@@ -58,6 +58,7 @@ const UserPage = async ({ params }: Props) => {
           image={user.image}
           description={user.description ?? ""}
           layout={user.layout}
+          timeZone={user.timezone ?? "EST"}
         />
         <div className="max-w-4xl w-full space-y-4">
           <AvailabilityCard
