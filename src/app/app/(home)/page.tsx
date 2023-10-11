@@ -24,6 +24,7 @@ const RootContainer = () => {
           alt="No Integrations"
           width={300}
           height={300}
+          className="pointer-events-none"
         />
         <p className="text-base md:text-lg text-center">
           You need to enable call integrations before you can start taking

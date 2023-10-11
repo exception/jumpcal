@@ -29,6 +29,7 @@ const NoCalendarTools = () => {
             alt="No Integrations"
             width={200}
             height={200}
+            className="pointer-events-none"
           />
           <p className="text-base text-center">
             You don&apos;t have any scheduling tools enabled, users won&apos;t

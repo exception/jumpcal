@@ -47,6 +47,7 @@ const CallLogPage = () => {
           alt="No Integrations"
           width={300}
           height={300}
+          className="pointer-events-none"
         />
         <p className="text-base md:text-lg text-center mt-2 mb-4">
           You haven&apos;t received any calls yet, time to share your profile

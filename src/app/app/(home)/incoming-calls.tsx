@@ -22,6 +22,7 @@ const IncomingCalls = () => {
           alt="No Incoming Calls"
           width={300}
           height={300}
+          className="pointer-events-none"
         />
         <p className="text-base md:text-lg mt-2 text-center">
           There are no incoming calls, you can take some time to relax!
