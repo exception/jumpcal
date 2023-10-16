@@ -11,9 +11,9 @@ const LandingPage = () => {
     <MaxWidthContainer className="mt-10">
       <div className="flex flex-col lg:flex-row space-y-5 lg:space-y-0  w-full items-center">
         <div className="flex flex-col space-y-4 shrink-0 w-full lg:w-1/2 text-center lg:text-start">
-          <h1 className="text-2xl lg:text-4xl font-bold">
+          <h1 className="text-2xl lg:text-4xl font-medium">
             Add{" "}
-            <span className="font-black underline underline-offset-4 decoration-4 decoration-pink whitespace-pre-wrap">
+            <span className="font-display underline underline-offset-4 decoration-4 decoration-pink whitespace-pre-wrap">
               instant meetings
             </span>{" "}
             to your calendar scheduling, instantly.

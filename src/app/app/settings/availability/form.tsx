@@ -25,6 +25,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import AvailabilityTable from "./availability-table";
 import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
 const DynamicBadge = dynamic(
   () => import("@/components/ui/badge").then((mod) => mod.Badge),
@@ -49,6 +50,14 @@ const AvailabilityContent = () => {
   });
 
   const timeZone = form.watch("timezone");
+
+  const timeZoneOptions = useMemo(() => {
+    return Intl.supportedValuesOf("timeZone").map((tz) => (
+      <SelectItem key={tz} value={tz}>
+        {tz}
+      </SelectItem>
+    ));
+  }, []);
 
   const saveTimezone = trpc.users.update.useMutation({
     async onSuccess() {
@@ -90,11 +99,7 @@ const AvailabilityContent = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="max-h-48 md:max-h-96 overflow-y-scroll">
-                    {Intl.supportedValuesOf("timeZone").map((tz) => (
-                      <SelectItem key={tz} value={tz}>
-                        {tz}
-                      </SelectItem>
-                    ))}
+                    {timeZoneOptions}
                   </SelectContent>
                 </Select>
                 <FormMessage />

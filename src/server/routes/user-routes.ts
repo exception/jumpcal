@@ -292,6 +292,6 @@ export const userRoutes = createTRPCRouter({
       },
     });
 
-    return { usage: user?.monthlyUsage, max: user?.maxUsage };
+    return { usage: user?.monthlyUsage ?? 0, max: user?.maxUsage ?? 50 };
   }),
 });

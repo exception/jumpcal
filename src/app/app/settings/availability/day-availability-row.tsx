@@ -73,7 +73,6 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
   const [timeRanges, setTimeRanges] = useState<TimeSlot[]>(slots ?? []);
   const [isAvailable, setIsAvailable] = useState(available);
   const times = generateTimeArray();
-  const [collided, setCollided] = useState(false);
 
   const handleTimeRangeAdd = useCallback(() => {
     if (!isAvailable) {
@@ -88,11 +87,7 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
   }, [isAvailable, timeRanges]);
 
   useEffect(() => {
-    if (rangesCollide(timeRanges)) {
-      setCollided(true);
-    } else {
-      setCollided(false);
-
+    if (!rangesCollide(timeRanges)) {
       onDayChange(day, {
         available: isAvailable,
         day,
@@ -218,7 +213,7 @@ const DayAvailabilityRow = ({ day, slots, available, onDayChange }: Props) => {
                 </Button>
               </div>
             ))}
-          {timeRanges.length > 0 && collided && (
+          {timeRanges.length > 0 && rangesCollide(timeRanges) && (
             <p className="text-sm text-red-500">This schedule has overlaps.</p>
           )}
         </div>

@@ -13,6 +13,7 @@ export default {
     extend: {
       fontFamily: {
         default: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
+        display: ['var(--font-cal-sans)'],
       },
       keyframes: {
         "accordion-down": {

@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 import {
   type CountryCode,
   countryNameRecord,
@@ -19,6 +20,29 @@ interface Props {
 
 const IncomingCallCard = ({ call }: Props) => {
   const utils = trpc.useContext();
+  const { toast } = useToast();
+  const { data: usage } = trpc.users.usage.useQuery();
+
+  const tryAcceptCall = () => {
+    if (!usage) {
+      acceptCall.mutate({
+        callId: call.id,
+      });
+    } else {
+      if (usage.usage >= usage.max) {
+        toast({
+          variant: "destructive",
+          title: "Exceeded monthly usage quota.",
+          description: "To continue using Jumpcal, please upgrade your plan.",
+        });
+      } else {
+        acceptCall.mutate({
+          callId: call.id,
+        });
+      }
+    }
+  };
+
   const rejectCall = trpc.calls.reject.useMutation({
     async onSuccess() {
       await utils.calls.incomingCalls.refetch();
@@ -76,11 +100,7 @@ const IncomingCallCard = ({ call }: Props) => {
           loading={acceptCall.isLoading}
           icon={<PhoneCall className="h-3 w-3" />}
           disabled={rejectCall.isLoading}
-          onClick={() =>
-            acceptCall.mutate({
-              callId: call.id,
-            })
-          }
+          onClick={() => tryAcceptCall()}
         >
           {acceptCall.isLoading ? "Connecting" : "Accept"}
         </Button>
