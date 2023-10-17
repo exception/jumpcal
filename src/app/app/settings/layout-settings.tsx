@@ -19,7 +19,7 @@ const LayoutSettings = () => {
   });
 
   return (
-    <div className="flex flex-col gap-y-2">
+    <div className="flex flex-col gap-y-2 pb-5">
       <p className="text-sm font-medium leading-none">Layout</p>
       <p className="text-sm font-normal text-neutral-400">
         How your profile is rendered.

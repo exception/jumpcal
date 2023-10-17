@@ -24,13 +24,7 @@ import { trpc } from "@/lib/providers/trpc-provider";
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import AvailabilityTable from "./availability-table";
-import dynamic from "next/dynamic";
 import { useMemo } from "react";
-
-const DynamicBadge = dynamic(
-  () => import("@/components/ui/badge").then((mod) => mod.Badge),
-  { ssr: false },
-);
 
 const formSchema = z.object({
   timezone: z.string(),
@@ -76,7 +70,7 @@ const AvailabilityContent = () => {
   };
 
   return (
-    <div>
+    <>
       <Form {...form}>
         {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <form
@@ -106,28 +100,19 @@ const AvailabilityContent = () => {
               </FormItem>
             )}
           />
-          <div className="flex justify-between w-full">
-            <DynamicBadge variant="default" className="grow-0">
-              <Clock className="h-4 w-4 mr-2" />
-              {new Date().toLocaleString("en-US", {
-                timeZone,
-                timeStyle: "short",
-              })}
-            </DynamicBadge>
-            <Button
-              disabled={!form.formState.isDirty || !form.formState.isValid}
-              size="sm"
-              className="self-end"
-              icon={<SaveIcon className="w-4 h-4" />}
-              loading={saveTimezone.isLoading}
-            >
-              Save
-            </Button>
-          </div>
+          <Button
+            disabled={!form.formState.isDirty || !form.formState.isValid}
+            size="sm"
+            className="self-end"
+            icon={<SaveIcon className="w-4 h-4" />}
+            loading={saveTimezone.isLoading}
+          >
+            Save
+          </Button>
         </form>
       </Form>
       <AvailabilityTable />
-    </div>
+    </>
   );
 };
 

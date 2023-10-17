@@ -41,7 +41,7 @@ const BillingSettings = () => {
           </div>
         </div>
       )}
-      <div className="bg-white p-4 border border-neutral-200 flex items-center justify-between rounded-md">
+      <div className="bg-white p-4 border border-neutral-200 flex flex-col md:flex-row md:items-center md:justify-between rounded-md">
         <div className="space-y-2">
           <h3 className="text-base font-medium">Manage Billing</h3>
           <p className="text-neutral-400 text-sm">
@@ -51,7 +51,10 @@ const BillingSettings = () => {
         <Link
           href={`${APP_URL}/api/stripe/billing`}
           target="_blank"
-          className={buttonVariants({ variant: "default" })}
+          className={buttonVariants({
+            variant: "default",
+            className: "mt-2 md:mt-0",
+          })}
         >
           <ExternalLink className="h-4 w-4" />
           Billing Page
