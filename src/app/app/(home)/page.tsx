@@ -18,7 +18,7 @@ const RootContainer = () => {
 
   if (!data) {
     return (
-      <div className="bg-white border border-neutral-200 flex items-center justify-center flex-col space-y-2 p-4 text-neutral-500">
+      <div className="bg-white border w-full border-neutral-200 flex items-center justify-center flex-col space-y-2 p-4 text-neutral-500">
         <Image
           src={"/_static/svgs/late-for-meeting.svg"}
           alt="No Integrations"

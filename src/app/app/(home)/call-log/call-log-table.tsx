@@ -48,7 +48,7 @@ const CallLogTable = ({
   fetchingNext,
 }: Props) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <div className="rounded-md divide-y divide-neutral-200 bg-white flex flex-col border border-neutral-200">
         {page.map((call) => {
           const variant = badgeVariant(call.status);

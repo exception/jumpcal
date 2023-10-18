@@ -13,7 +13,7 @@ const IncomingCalls = () => {
 
   if (!calls || calls?.length === 0) {
     return (
-      <div className="relative border border-neutral-200 rounded-md flex flex-col items-center justify-center text-neutral-500 bg-white p-4">
+      <div className="relative w-full border border-neutral-200 rounded-md flex flex-col items-center justify-center text-neutral-500 bg-white p-4">
         {isRefetching && (
           <Loader2 className="absolute top-2 right-2 text-neutral-500 h-6 w-6 animate-spin" />
         )}
@@ -32,7 +32,7 @@ const IncomingCalls = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 w-full">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {calls?.map((call) => (
           <IncomingCallCard key={`call-${call.callerEmail}`} call={call} />

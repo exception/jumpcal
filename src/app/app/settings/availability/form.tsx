@@ -19,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Clock, SaveIcon } from "lucide-react";
+import { SaveIcon } from "lucide-react";
 import { trpc } from "@/lib/providers/trpc-provider";
 import { useToast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
@@ -42,8 +42,6 @@ const AvailabilityContent = () => {
         Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
   });
-
-  const timeZone = form.watch("timezone");
 
   const timeZoneOptions = useMemo(() => {
     return Intl.supportedValuesOf("timeZone").map((tz) => (

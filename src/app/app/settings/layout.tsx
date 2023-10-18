@@ -8,6 +8,7 @@ import { ChevronRight } from "lucide-react";
 import AppLayout from "@/components/app/app-layout";
 import React, { useMemo } from "react";
 import { capitalize } from "radash";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const navItems: NavItem[] = [
   {
@@ -34,6 +35,7 @@ const navItems: NavItem[] = [
 
 const SettingsPage = ({ children }: React.PropsWithChildren<unknown>) => {
   const pathname = usePathname();
+  const [parentDivRef] = useAutoAnimate();
 
   const breadCrumb = useMemo(() => {
     const crumbs = pathname?.slice(1).split("/");
@@ -58,7 +60,9 @@ const SettingsPage = ({ children }: React.PropsWithChildren<unknown>) => {
         <Separator className="my-5" />
         <div className="flex items-start lg:flex-row lg:space-x-12 flex-col space-y-8 lg:space-y-0">
           <Navigation items={navItems} />
-          {children}
+          <div ref={parentDivRef} className="flex w-full">
+            {children}
+          </div>
         </div>
       </MaxWidthContainer>
     </AppLayout>

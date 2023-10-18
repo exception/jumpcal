@@ -41,7 +41,7 @@ const CallLogPage = () => {
 
   if (!data || isMultiDArrayEmpty(data.pages)) {
     return (
-      <div className="bg-white border border-neutral-200 flex items-center justify-center flex-col p-4 text-neutral-500">
+      <div className="bg-white border border-neutral-200 flex items-center justify-center flex-col p-4 text-neutral-500 w-full">
         <Image
           src={"/_static/svgs/telephone-call.svg"}
           alt="No Integrations"
